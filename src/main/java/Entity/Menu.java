@@ -24,7 +24,7 @@ import java.util.List;
  * @author danie
  */
 @Entity
-@Table(name = "Menu") // Nombre de la tabla en la base de datos
+@Table(name = "Menu") 
 public class Menu {
 
     @Id
@@ -43,7 +43,7 @@ public class Menu {
     @Column(name = "precio")
     private Map<String, BigDecimal> preciosPorTamano;
 
-    @OneToMany(mappedBy = "menu") // El atributo 'mappedBy' debe coincidir con el nombre de la variable en la clase 'Extra'
+    @OneToMany(mappedBy = "menu") 
     private List<Extra> extras;
 
     // Getters y Setters
