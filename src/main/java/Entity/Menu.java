@@ -29,7 +29,7 @@ public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_Menu; // Cambia el nombre del ID
+    private long id_Menu; 
 
     @Column(nullable = false)
     private String nombre;

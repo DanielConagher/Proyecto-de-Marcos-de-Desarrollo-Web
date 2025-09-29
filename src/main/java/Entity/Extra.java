@@ -21,8 +21,8 @@ public class Extra {
     private BigDecimal precio;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id") // El nombre de la columna foránea ahora apunta a 'menu'
-    private Menu menu; // El nombre de la variable debe ser 'menu' para que coincida con 'mappedBy'
+    @JoinColumn(name = "menu_id") 
+    private Menu menu; 
 
     // Getters y Setters
     public long getId_extra() {
