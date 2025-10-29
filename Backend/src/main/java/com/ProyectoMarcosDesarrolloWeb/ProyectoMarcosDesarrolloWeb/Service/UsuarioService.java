@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Service;
 
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity.Usuario;
@@ -17,15 +13,17 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioMapper usuarioMapper; 
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
+        this.usuarioMapper = usuarioMapper; 
     }
 
     // Obtener perfil
     public UsuarioPerfilDTO obtenerPerfil(Long idUsuario) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
-        return usuarioOpt.map(UsuarioMapper::toDTO).orElse(null);
+        return usuarioOpt.map(usuarioMapper::toDTO).orElse(null); 
     }
 
     // Actualizar perfil
@@ -33,14 +31,14 @@ public class UsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            UsuarioMapper.actualizarEntidadDesdeDTO(usuario, dto);
+            usuarioMapper.actualizarEntidadDesdeDTO(usuario, dto); 
             Usuario actualizado = usuarioRepository.save(usuario);
-            return UsuarioMapper.toDTO(actualizado);
+            return usuarioMapper.toDTO(actualizado); 
         }
         return null;
     }
 
-    // Cambiar contraseña
+    // Cambiar contraseña 
     public boolean cambiarContrasena(Long idUsuario, CambioContrasenaDTO dto) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
         if (usuarioOpt.isPresent()) {
@@ -54,5 +52,3 @@ public class UsuarioService {
         return false;
     }
 }
-
-

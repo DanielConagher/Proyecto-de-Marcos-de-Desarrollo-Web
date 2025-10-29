@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Controller;
 
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.UsuarioPerfilDTO;
@@ -19,37 +15,39 @@ public class UsuarioController {
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
+    
+    private Long getCurrentUserId() { 
+        return 1L; 
+    }
 
-    // GET Perfil
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioPerfilDTO> obtenerPerfil(@PathVariable Long id) {
-        UsuarioPerfilDTO dto = usuarioService.obtenerPerfil(id);
+    @GetMapping("/perfil")
+    public ResponseEntity<UsuarioPerfilDTO> obtenerPerfil() {
+        Long idUsuario = getCurrentUserId(); 
+        UsuarioPerfilDTO dto = usuarioService.obtenerPerfil(idUsuario);
         if (dto != null) {
             return ResponseEntity.ok(dto);
         }
         return ResponseEntity.notFound().build();
     }
 
-    // PUT Actualizar perfil
-    @PutMapping("/{id}")
+    @PutMapping("/perfil")
     public ResponseEntity<UsuarioPerfilDTO> actualizarPerfil(
-            @PathVariable Long id,
             @RequestBody UsuarioPerfilDTO dto
     ) {
-        UsuarioPerfilDTO actualizado = usuarioService.actualizarPerfil(id, dto);
+        Long idUsuario = getCurrentUserId(); 
+        UsuarioPerfilDTO actualizado = usuarioService.actualizarPerfil(idUsuario, dto);
         if (actualizado != null) {
             return ResponseEntity.ok(actualizado);
         }
         return ResponseEntity.notFound().build();
     }
 
-    // PUT Cambiar contraseña
-    @PutMapping("/{id}/cambiar-password")
+    @PutMapping("/cambiar-password")
     public ResponseEntity<String> cambiarPassword(
-            @PathVariable Long id,
             @RequestBody CambioContrasenaDTO dto
     ) {
-        boolean ok = usuarioService.cambiarContrasena(id, dto);
+        Long idUsuario = getCurrentUserId();
+        boolean ok = usuarioService.cambiarContrasena(idUsuario, dto);
         if (ok) {
             return ResponseEntity.ok("Contraseña actualizada correctamente");
         }

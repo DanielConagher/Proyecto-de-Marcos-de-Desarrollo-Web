@@ -9,16 +9,14 @@ public class UsuarioPerfilDTO {
     private String correo;
     private long telefono;
     private String direccion;
-    private String avatar;
 
     public UsuarioPerfilDTO() {}
 
-    public UsuarioPerfilDTO(String nombre, String correo, long telefono, String direccion, String avatar) {
+    public UsuarioPerfilDTO(String nombre, String correo, long telefono, String direccion) {
         this.nombre = nombre;
         this.correo = correo;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.avatar = avatar;
     }
 
     public String getNombre() { return nombre; }
@@ -32,7 +30,4 @@ public class UsuarioPerfilDTO {
 
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
-
-    public String getAvatar() { return avatar; }
-    public void setAvatar(String avatar) { this.avatar = avatar; }
 }
