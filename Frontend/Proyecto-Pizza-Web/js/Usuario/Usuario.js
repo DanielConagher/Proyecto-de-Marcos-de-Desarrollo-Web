@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // URL base de tu API de Spring Boot
+    const API_URL = 'http://localhost:8080/api/usuarios';
+
     // 1. VERIFICAR SI EL USUARIO ESTÁ LOGUEADO
+    // Por ahora, asumimos que si llegas aquí, estás logueado y tu backend usa el ID 1.
+    // **NOTA:** Esto debería ser reemplazado por la verificación de un token JWT en un entorno real.
     const estaLogueado = localStorage.getItem("usuarioLogueado") === "true";
     
     if (!estaLogueado) {
@@ -9,31 +14,52 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 2. OCULTAR CAMPOS DE CONTRASEÑA AL INICIO
-    document.getElementById("campoPasswordActual").style.display = "none";
-    document.getElementById("camposNuevaPassword").style.display = "none";
+    const campoPasswordActual = document.getElementById("campoPasswordActual");
+    const camposNuevaPassword = document.getElementById("camposNuevaPassword");
+    campoPasswordActual.style.display = "none";
+    camposNuevaPassword.style.display = "none";
     
-    // 3. CARGAR DATOS DEL USUARIO
-    function cargarDatosUsuario() {
-        const nombre = localStorage.getItem("nombreUsuario") || "";
-        const correo = localStorage.getItem("correo") || "";
-        const telefono = localStorage.getItem("telefono") || "";
-        const direccion = localStorage.getItem("direccion") || "";
-        const avatar = localStorage.getItem("avatar") || "../Imagenes/PerfilDefecto.jpg";
-        
-        document.getElementById("nombre").value = nombre;
-        document.getElementById("email").value = correo;
-        document.getElementById("telefono").value = telefono;
-        document.getElementById("direccion").value = direccion;
-        document.getElementById("fotoPerfilActual").src = avatar;
+    
+    // 3. CARGAR DATOS DEL USUARIO DESDE EL BACKEND
+    async function cargarDatosUsuario() {
+        try {
+            const response = await fetch(`${API_URL}/perfil`);
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error("Perfil de usuario no encontrado en la API.");
+                }
+                throw new Error(`Error al cargar el perfil: ${response.statusText}`);
+            }
+            
+            const userData = await response.json();
+
+            // Mapeo del DTO del Backend a la vista del Frontend
+            document.getElementById("nombre").value = userData.nombre || "";
+            document.getElementById("email").value = userData.correo || "";
+            document.getElementById("telefono").value = userData.telefono || "";
+            document.getElementById("direccion").value = userData.direccion || "";
+            
+            // Asumiendo que el campo 'avatar' del DTO del backend es nulo
+            // Por ahora, el avatar se seguirá gestionando en localStorage o se cargará un valor por defecto.
+            const avatar = localStorage.getItem("avatar") || "../Imagenes/PerfilDefecto.jpg";
+            document.getElementById("fotoPerfilActual").src = avatar;
+
+            // Almacenamos el correo actual para la validación de la contraseña
+            localStorage.setItem("temp_current_email", userData.correo || "");
+
+        } catch (error) {
+            console.error("Error en cargarDatosUsuario:", error.message);
+            mostrarMensaje("No se pudieron cargar los datos del perfil.", "error");
+        }
     }
     
     // Cargar datos iniciales
     cargarDatosUsuario();
-    
+
     // 4. VARIABLES GLOBALES
     let modoEdicion = false;
     let avatarSeleccionado = localStorage.getItem("avatar") || "../Imagenes/PerfilDefecto.jpg";
-    
+
     // 5. ELEMENTOS
     const botonEditar = document.getElementById("btnEditar");
     const botonGuardar = document.getElementById("btnGuardar");
@@ -42,8 +68,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectorAvatar = document.getElementById("selectorAvatar");
     const opcionesAvatar = document.querySelectorAll(".opcion-avatar");
     const formulario = document.getElementById("formularioPerfil");
-    const campoPasswordActual = document.getElementById("campoPasswordActual");
-    const camposNuevaPassword = document.getElementById("camposNuevaPassword");
     
     // 6. DESHABILITAR BOTÓN CAMBIAR AVATAR AL INICIO
     botonCambiarAvatar.disabled = true;
@@ -71,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
             botonCambiarAvatar.style.cursor = "pointer";
             
         } else {
-
             // DESACTIVAR MODO EDICIÓN
             campos.forEach(campo => campo.setAttribute("readonly", true));
             botonGuardar.disabled = true;
@@ -98,10 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 8. FUNCIÓN PARA SELECTOR DE AVATAR
+    // 8. FUNCIÓN PARA SELECTOR DE AVATAR (sin cambios)
     function toggleSelectorAvatar() {
         if (!modoEdicion) return;
-        
         if (selectorAvatar.style.display === "none" || !selectorAvatar.style.display) {
             selectorAvatar.style.display = "block";
             botonCambiarAvatar.textContent = "Ocultar Avatares";
@@ -111,15 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 9. FUNCIÓN PARA SELECCIONAR AVATAR
+    // 9. FUNCIÓN PARA SELECCIONAR AVATAR (sin cambios)
     function seleccionarAvatar(event) {
-        if (!modoEdicion) return; 
-        
-        // Verificar que el click fue en una imagen
+        if (!modoEdicion) return;
         if (event.target.classList.contains("opcion-avatar")) {
             avatarSeleccionado = event.target.getAttribute("data-avatar-src");
-            
-            // Actualizar avatar grande - USANDO ATRIBUTO src
             const fotoGrande = document.getElementById("fotoPerfilActual");
             fotoGrande.src = avatarSeleccionado;
             
@@ -131,12 +149,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 10. FUNCIÓN PARA CAMBIO DE CONTRASEÑA
+    // 10. FUNCIÓN PARA CAMBIO DE CONTRASEÑA (sin cambios en la visibilidad)
     function toggleCamposPassword(event) {
         event.preventDefault();
-        
         if (!modoEdicion) {
-            alert("modo edición para cambiar la contraseña");
+            alert("Debes estar en modo edición para cambiar la contraseña");
             return;
         }
         
@@ -155,59 +172,101 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 11. FUNCIÓN PARA VALIDAR Y GUARDAR DATOS
-    function guardarDatos(event) {
+    // 11. FUNCIÓN PARA VALIDAR Y GUARDAR DATOS EN EL BACKEND
+    async function guardarDatos(event) {
         event.preventDefault();
         
-        // Validar contraseñas si se están cambiando
+        const nombre = document.getElementById("nombre").value;
+        const telefono = document.getElementById("telefono").value;
+        const direccion = document.getElementById("direccion").value;
+        
+        // Objeto DTO a enviar al backend
+        const dto = {
+            nombre,
+            correo: localStorage.getItem("temp_current_email"), // El correo no se cambia, se envía para coherencia
+            telefono: parseInt(telefono), // Aseguramos que sea número
+            direccion, // Aquí se envía la dirección (que debe ser el ID si el campo se edita)
+            avatar: avatarSeleccionado // El avatar se maneja en el frontend por ahora
+        };
+
+        let passwordsChanged = false;
+
+        // Validar y enviar cambio de contraseñas si se están cambiando
         if (campoPasswordActual.style.display !== "none") {
             const nuevaPassword = document.getElementById("nuevaPassword").value;
             const confirmarPassword = document.getElementById("confirmarPassword").value;
             const passwordActual = document.getElementById("passwordActual").value;
-            const contraseñaGuardada = localStorage.getItem("contraseña");
             
-            // Verificar que todos los campos de contraseña estén llenos
             if (!passwordActual || !nuevaPassword || !confirmarPassword) {
                 alert("Todos los campos de contraseña son obligatorios");
                 return;
             }
-            
-            if (passwordActual !== contraseñaGuardada) {
-                alert("La contraseña actual es incorrecta");
-                return;
-            }
-            
             if (nuevaPassword !== confirmarPassword) {
                 alert("Las nuevas contraseñas no coinciden");
                 return;
             }
-            
             if (nuevaPassword.length < 6) {
-                alert("La contraseña es muy corta 6 caracteres debe de tener");
+                alert("La nueva contraseña debe tener al menos 6 caracteres");
                 return;
             }
-            
-            localStorage.setItem("contraseña", nuevaPassword);
-            alert("Contraseña actualizada correctamente.");
+
+            try {
+                const responsePassword = await fetch(`${API_URL}/cambiar-password`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contrasenaActual: passwordActual,
+                        nuevaContrasena: nuevaPassword
+                    })
+                });
+
+                if (!responsePassword.ok) {
+                    const errorText = await responsePassword.text();
+                    alert(`Error al cambiar contraseña: ${errorText}`);
+                    return;
+                }
+                passwordsChanged = true;
+            } catch (error) {
+                console.error("Error al cambiar contraseña:", error);
+                alert("Hubo un error de red al cambiar la contraseña.");
+                return;
+            }
         }
         
-        // Guardar otros datos
-        localStorage.setItem("nombreUsuario", document.getElementById("nombre").value);
-        localStorage.setItem("telefono", document.getElementById("telefono").value);
-        localStorage.setItem("direccion", document.getElementById("direccion").value);
-        localStorage.setItem("avatar", avatarSeleccionado);
-        
-        // Mostrar mensaje de éxito
-        mostrarMensaje("Información guardada correctamente");
-        
+        // 11.2. GUARDAR OTROS DATOS EN EL BACKEND
+        try {
+            const responsePerfil = await fetch(`${API_URL}/perfil`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dto)
+            });
+
+            if (!responsePerfil.ok) {
+                throw new Error("No se pudo actualizar la información del perfil.");
+            }
+            
+            // Guardar solo el avatar localmente (si lo cambiaste)
+            localStorage.setItem("avatar", avatarSeleccionado);
+            
+            // Mostrar mensaje de éxito
+            if (passwordsChanged) {
+                mostrarMensaje("Contraseña y perfil actualizados correctamente.", "success");
+            } else {
+                mostrarMensaje("Información guardada correctamente.", "success");
+            }
+
+        } catch (error) {
+            console.error("Error al guardar datos:", error);
+            mostrarMensaje("Error: No se pudo guardar la información.", "error");
+            return;
+        }
+
         // Salir del modo edición
-        modoEdicion = true;
         toggleModoEdicion();
     }
     
-    // 12. FUNCIÓN PARA MOSTRAR MENSAJES BONITOS
+    // 12. FUNCIÓN PARA MOSTRAR MENSAJES BONITOS (sin cambios)
     function mostrarMensaje(mensaje, tipo) {
-        // Crear elemento de mensaje
         const alerta = document.createElement("div");
         alerta.className = `alert alert-${tipo === "error" ? "danger" : "success"} alert-dismissible fade show`;
         alerta.style.position = "fixed";
@@ -219,11 +278,8 @@ document.addEventListener('DOMContentLoaded', function() {
             ${mensaje}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
-        
-        // Agregar al body
         document.body.appendChild(alerta);
-        
-        // Auto-eliminar después de 4 segundos
+
         setTimeout(() => {
             if (alerta.parentNode) {
                 alerta.parentNode.removeChild(alerta);
@@ -243,10 +299,12 @@ document.addEventListener('DOMContentLoaded', function() {
     formulario.addEventListener("submit", guardarDatos);
 });
 
-// 14. FUNCIÓN PARA CERRAR SESIÓN (global)
+// 14. FUNCIÓN PARA CERRAR SESIÓN 
 function cerrarSesion() {
     if (confirm("¿Estás seguro de que quieres cerrar sesión?")) {
         localStorage.removeItem("usuarioLogueado");
+        localStorage.removeItem("temp_current_email"); 
+        localStorage.removeItem("avatar");
         alert("👋 Sesión cerrada correctamente");
         window.location.href = "../html/loguin.html";
     }
