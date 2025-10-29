@@ -6,6 +6,7 @@ package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity;
 
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -41,6 +42,25 @@ public class TamanioProductoPrecioId implements Serializable{
         this.id_Producto = id_Producto;
     }
     
-    
+    @Override
+    public int hashCode() {
+        // Genera el código hash basado en los dos campos de la clave
+        return Objects.hash(id_Tamanio, id_Producto); 
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final TamanioProductoPrecioId other = (TamanioProductoPrecioId) obj;
+        
+        // Compara los dos campos para determinar si dos claves son iguales
+        return Objects.equals(this.id_Tamanio, other.id_Tamanio) && 
+               Objects.equals(this.id_Producto, other.id_Producto);
+    }
     
 }

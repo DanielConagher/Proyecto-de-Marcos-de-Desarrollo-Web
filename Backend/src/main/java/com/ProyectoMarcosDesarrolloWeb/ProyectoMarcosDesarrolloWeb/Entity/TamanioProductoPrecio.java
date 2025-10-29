@@ -4,6 +4,8 @@
  */
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -17,7 +19,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name="Tamanio_Producto_Precio")
-class TamanioProductoPrecio {
+public class TamanioProductoPrecio {
     
     @EmbeddedId
     private TamanioProductoPrecioId id;
@@ -35,6 +37,8 @@ class TamanioProductoPrecio {
     public TamanioProductoPrecioId getId() {
         return id;
     }
+
+    private BigDecimal precio;
 
     public void setId(TamanioProductoPrecioId id) {
         this.id = id;
@@ -56,6 +60,11 @@ class TamanioProductoPrecio {
         this.producto = producto;
     }
     
-    
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
     
 }
