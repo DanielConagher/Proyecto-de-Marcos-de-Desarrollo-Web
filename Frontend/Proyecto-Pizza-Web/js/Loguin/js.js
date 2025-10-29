@@ -1,28 +1,34 @@
 function validarDatos() {
-    const correoGuardado = localStorage.getItem("correo");
-    const contraseñaGuardada = localStorage.getItem("contraseña");
+    const correo = document.getElementById("correo").value;
+    const contrasena = document.getElementById("contraseña").value;
 
-    const correo = document.getElementById("correo").value.trim();
-    const contraseña = document.getElementById("contraseña").value.trim();
+    const data = {
+        correo: correo,
+        contrasena: contrasena
+    };
 
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (correo === "" || contraseña === "") {
-        alert("Por favor, complete todos los campos.");
-        return;
-    }
-
-    if (!regexEmail.test(correo)) {
-        alert("Por favor, ingrese un correo válido.");
-        return;
-    }
-
-    if (correo === correoGuardado && contraseña === contraseñaGuardada) {
-        // Para Usuario
-        localStorage.setItem("usuarioLogueado", "true");
-
-        window.location.href = "Menu.html";
-    } else {
-        alert("Usuario y/o contraseña incorrectos");
-    }
+    fetch("http://localhost:8080/api/user/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if(!response.ok) throw new Error("Error en la llamada al servidor");
+        return response.json();
+    })
+    .then(isLogged => {
+        if (isLogged) {
+            alert("Login exitoso");
+            // Redireccionar a página principal
+            window.location.href = "menu.html";
+        } else {
+            alert("Correo o contraseña incorrectos");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Ocurrió un error, inténtalo más tarde");
+    });
 }
