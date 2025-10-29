@@ -17,15 +17,17 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioMapper usuarioMapper;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
+        this.usuarioMapper = usuarioMapper;
     }
 
     // Obtener perfil
     public UsuarioPerfilDTO obtenerPerfil(Long idUsuario) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
-        return usuarioOpt.map(UsuarioMapper::toDTO).orElse(null);
+        return usuarioOpt.map(usuarioMapper::toDTO).orElse(null);
     }
 
     // Actualizar perfil
@@ -33,9 +35,9 @@ public class UsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            UsuarioMapper.actualizarEntidadDesdeDTO(usuario, dto);
+            usuarioMapper.actualizarEntidadDesdeDTO(usuario, dto);
             Usuario actualizado = usuarioRepository.save(usuario);
-            return UsuarioMapper.toDTO(actualizado);
+            return usuarioMapper.toDTO(actualizado);
         }
         return null;
     }
@@ -45,7 +47,7 @@ public class UsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            if (usuario.getContrasena().equals(dto.getContrasenaActual())) { 
+            if (usuario.getContrasena().equals(dto.getContrasenaActual())) {
                 usuario.setContrasena(dto.getNuevaContrasena());
                 usuarioRepository.save(usuario);
                 return true;

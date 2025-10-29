@@ -23,7 +23,7 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_Rol;
     
-    private String nombre_rol;
+    private String nombreRol;
     
     @OneToMany(mappedBy="rol")
     private List<Usuario> usuarios;
@@ -36,6 +36,14 @@ public class Rol {
         this.id_Rol = id_Rol;
     }
 
+    public String getNombreRol() {
+        return nombreRol;
+    }
+
+    public void setNombreRol(String nombreRol) {
+        this.nombreRol = nombreRol;
+    }
+
     public List<Usuario> getUsuarios() {
         return usuarios;
     }
@@ -43,17 +51,4 @@ public class Rol {
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
-    
-    
-
-    public String getNombre_rol() {
-        return nombre_rol;
-    }
-
-    public void setNombre_rol(String nombre_rol) {
-        this.nombre_rol = nombre_rol;
-    }
-    
-    
-
 }

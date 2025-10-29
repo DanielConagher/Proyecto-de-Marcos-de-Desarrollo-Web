@@ -4,14 +4,13 @@
  */
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Service;
 
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity.Rol;
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity.Usuario;
-import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Mapper.UserMapper;
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Mapper.UserLoginRegisterMapper;
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Repository.RolRepository;
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Repository.UserRepository;
-import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.userDTO;
-import java.util.Optional;
-
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.RegistroUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,12 +20,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+    @Autowired
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    private final RolRepository rolRepository;
+
+    @Autowired
+    private final UserLoginRegisterMapper userMapper;
+
+    @Autowired
+    public UserService(UserRepository userRepository, RolRepository rolRepository, UserLoginRegisterMapper userMapper) {
         this.userRepository = userRepository;
+        this.rolRepository = rolRepository;
         this.userMapper = userMapper;
     }
 
@@ -36,10 +42,21 @@ public class UserService {
     }
 
     //  REGISTRO
-    public userDTO registrarUsuario(userDTO dto) {
-        Usuario user = userMapper.toEntity(dto);
-        Usuario guardado = userRepository.save(user);
-        return userMapper.toDTO(guardado);
+    public boolean registrarUsuario(RegistroUserDTO dto) {
+        try {
+            Rol rolPorDefecto = rolRepository.findBynombreRol("Cliente");
+            if (rolPorDefecto == null) {
+                return false; // no existe el rol por defecto
+            }
+            Usuario nuevo = userMapper.toEntityFromRegister(dto, rolPorDefecto);
+            Usuario guardado = userRepository.save(nuevo);
+
+            // Validamos que se haya guardado correctamente
+            return guardado != null && guardado.getIdUsuario() != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     //  RECUPERAR CONTRASEÑA
@@ -48,5 +65,4 @@ public class UserService {
                 .map(Usuario::getContrasena)
                 .orElse(null);
     }
-
 }

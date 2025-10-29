@@ -5,8 +5,9 @@
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Controller;
 
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Service.UserService;
-import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.userDTO;
-import java.util.Map;
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.LoguinUserDTO;
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.RegistroUserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,21 +23,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 public class LoguinController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    public LoguinController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping("/login")
-    public boolean login(@RequestBody userDTO userDTO) {
+    public boolean login(@RequestBody LoguinUserDTO userDTO) {
         String correo = userDTO.getCorreo();
-        String contrasena = userDTO.getPassword();
+        String contrasena = userDTO.getContrasena();
         return userService.login(correo, contrasena);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody userDTO userDTO) {
+    public ResponseEntity<String> register(@RequestBody RegistroUserDTO userDTO) {
         // Verificar si el correo ya existe
         if (userService.recuperarContrasena(userDTO.getCorreo()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -49,15 +48,4 @@ public class LoguinController {
                 .body("Usuario registrado correctamente");
     }
 
-    @PostMapping("/recuperar-contrasena")
-    public ResponseEntity<String> recuperarContrasena(@RequestBody userDTO userDTO) {
-        String contrasena = userService.recuperarContrasena(userDTO.getCorreo());
-        if (contrasena == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Correo no encontrado");
-        }
-
-        // Nota: nunca se debe devolver la contraseña real en producción
-        return ResponseEntity.ok("La contraseña es: " + contrasena);
-    }
 }

@@ -21,7 +21,7 @@ public class UserMapper {
     public userDTO toDTO(Usuario usuario) {
         userDTO dto = new userDTO();
         dto.setCorreo(usuario.getCorreo());
-        dto.setRol(usuario.getRol().getNombre_rol());
+        dto.setRol(usuario.getRol().getNombreRol());
         dto.setPassword(usuario.getContrasena());
         return dto;
     }
@@ -31,7 +31,7 @@ public class UserMapper {
         user.setNombre(dto.getNombre());
         user.setCorreo(dto.getCorreo());
         Rol rol = new Rol();
-        rol.setNombre_rol(dto.getRol());
+        rol.setNombreRol(dto.getRol());
         user.setRol(rol);
         user.setContrasena(dto.getPassword());
         return user;
