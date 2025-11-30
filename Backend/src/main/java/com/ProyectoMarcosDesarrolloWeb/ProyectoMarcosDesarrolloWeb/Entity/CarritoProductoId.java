@@ -5,13 +5,15 @@
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity;
 
 import jakarta.persistence.Embeddable;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
  * @author danie
  */
 @Embeddable
-class CarritoProductoId {
+public class CarritoProductoId implements Serializable {
     private Long id_Producto;
     private Long id_Carrito;
 
@@ -39,6 +41,17 @@ class CarritoProductoId {
         this.id_Carrito = id_Carrito;
     }
     
-    
-    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarritoProductoId that = (CarritoProductoId) o;
+        return Objects.equals(id_Producto, that.id_Producto) &&
+               Objects.equals(id_Carrito, that.id_Carrito);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id_Producto, id_Carrito);
+    }
 }

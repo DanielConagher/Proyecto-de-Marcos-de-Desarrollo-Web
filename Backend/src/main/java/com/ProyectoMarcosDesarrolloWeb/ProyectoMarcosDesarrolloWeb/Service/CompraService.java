@@ -37,4 +37,8 @@ public class CompraService {
     public List<CompraDTO> obtenerHistorial(Long idUsuario) {
         return compraMapper.toDtoList(compraRepository.findByUsuarioIdUsuario(idUsuario));
     }
+
+    public List<CompraDTO> obtenerTodasLasCompras() {
+        return compraMapper.toDtoList(compraRepository.findAll());
+    }
 }

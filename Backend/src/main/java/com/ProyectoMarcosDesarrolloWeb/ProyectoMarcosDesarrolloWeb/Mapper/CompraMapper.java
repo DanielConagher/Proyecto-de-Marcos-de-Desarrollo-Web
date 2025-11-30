@@ -1,10 +1,14 @@
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Mapper;
 
-import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.CompraDTO; 
-import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity.Compra; 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.CompraDTO;
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.CarritoItemDTO;
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity.Compra;
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity.CompraProducto;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +49,43 @@ public class CompraMapper {
             dto.setMetodoPago("Sin definir");
         }
         
+        // --- Mapear los productos de la compra ---
+        if (compra.getCompraProductos() != null && !compra.getCompraProductos().isEmpty()) {
+            List<CarritoItemDTO> items = new ArrayList<>();
+            for (CompraProducto cp : compra.getCompraProductos()) {
+                CarritoItemDTO item = new CarritoItemDTO();
+                
+                if (cp.getProducto() != null) {
+                    item.setIdProducto(cp.getProducto().getIdProducto());
+                    item.setNombreProducto(cp.getProducto().getNombre());
+                    
+                    // Imagen en Base64
+                    if (cp.getProducto().getImagen() != null) {
+                        item.setImagenBase64(Base64.getEncoder().encodeToString(cp.getProducto().getImagen()));
+                    }
+                }
+                
+                item.setCantidad(cp.getCantidad());
+                item.setPrecioUnitario(cp.getPrecio_venta());
+                
+                // Calcular precio total del item
+                if (cp.getPrecio_venta() != null) {
+                    item.setPrecioTotal(cp.getPrecio_venta().multiply(BigDecimal.valueOf(cp.getCantidad())));
+                }
+                
+                // Extra si existe
+                if (cp.getExtra() != null) {
+                    List<Long> extras = new ArrayList<>();
+                    extras.add(cp.getExtra().getIdExtra());
+                    item.setIdExtras(extras);
+                }
+                
+                items.add(item);
+            }
+            dto.setItems(items);
+        } else {
+            dto.setItems(new ArrayList<>());
+        }
         
         return dto;
     }

@@ -1,61 +1,64 @@
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import static java.awt.SystemColor.menu;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Table(name = "Extra")
+@Table(name = "extra")
 public class Extra {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_Extra;
+    @Column(name = "id_extra")
+    private Long idExtra;
     
-    private String nombre_extra;
-    private BigDecimal precio_venta;
+    @Column(name = "nombre_extra")
+    private String nombreExtra;
+    
+    @Column(name = "precio_venta")
+    private BigDecimal precioVenta;
 
-    @OneToMany(mappedBy="extra")
-    private List<CompraProducto> compraProducto;
+    @OneToMany(mappedBy = "extra")
+    private List<CompraProducto> compraProductos;
 
     // Getters y Setters
 
-    public long getId_Extra() {
-        return id_Extra;
+    public Long getIdExtra() {
+        return idExtra;
     }
 
-    public void setId_Extra(long id_Extra) {
-        this.id_Extra = id_Extra;
+    public void setIdExtra(Long idExtra) {
+        this.idExtra = idExtra;
     }
 
-    public String getNombre_extra() {
-        return nombre_extra;
+    public String getNombreExtra() {
+        return nombreExtra;
     }
 
-    public void setNombre_extra(String nombre_extra) {
-        this.nombre_extra = nombre_extra;
+    public void setNombreExtra(String nombreExtra) {
+        this.nombreExtra = nombreExtra;
     }
 
-    public BigDecimal getPrecio_venta() {
-        return precio_venta;
+    public BigDecimal getPrecioVenta() {
+        return precioVenta;
     }
 
-    public void setPrecio_venta(BigDecimal precio_venta) {
-        this.precio_venta = precio_venta;
+    public void setPrecioVenta(BigDecimal precioVenta) {
+        this.precioVenta = precioVenta;
     }
 
-    public List<CompraProducto> getCompraProducto() {
-        return compraProducto;
+    public List<CompraProducto> getCompraProductos() {
+        return compraProductos;
     }
 
-    public void setCompraProducto(List<CompraProducto> compraProducto) {
-        this.compraProducto = compraProducto;
+    public void setCompraProductos(List<CompraProducto> compraProductos) {
+        this.compraProductos = compraProductos;
     }
-    
 }

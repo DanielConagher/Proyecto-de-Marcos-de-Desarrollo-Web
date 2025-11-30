@@ -17,10 +17,16 @@ public class CompraController {
 
     private Long getCurrentUserId() { return 1L; }
 
-    // ENDPOINT: GET /api/compras
+    // ENDPOINT: GET /api/compras - Historial del usuario actual
     @GetMapping
     public List<CompraDTO> getHistorialCompras() {
         return compraService.obtenerHistorial(getCurrentUserId());
+    }
+
+    // ENDPOINT: GET /api/compras/todas - Todas las compras (para admin)
+    @GetMapping("/todas")
+    public List<CompraDTO> getTodasLasCompras() {
+        return compraService.obtenerTodasLasCompras();
     }
 
     // ENDPOINT: POST /api/compras/finalizar

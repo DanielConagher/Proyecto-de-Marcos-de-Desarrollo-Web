@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entregas - Nonna's Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="CSS/PanelAdmin.css">  
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img class="img-fluid" src="Imagenes/nonnaLogo.png">
+            </div>
+            <h5 class="sidebar-text mb-0">Nonna's Pizza</h5>
+            <small class="sidebar-text">Panel de gestión</small>
+        </div>
+        
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="Dashboard.html">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="PuntoVenta.html">
+                        <i class="bi bi-cash-coin"></i>
+                        <span class="sidebar-text">Punto de Venta</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="Entregas.html">
+                        <i class="bi bi-truck"></i>
+                        <span class="sidebar-text">Entregas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Inventario.html">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="sidebar-text">Catalogo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Reportes.html">
+                        <i class="bi bi-clipboard-data"></i>
+                        <span class="sidebar-text">Reportes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Configuracion.html">
+                        <i class="bi bi-gear"></i>
+                        <span class="sidebar-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar"><img class="img-fluid" src="Imagenes/Perfil2.jpg"></div>
+                <div class="user-details sidebar-text">
+                    <p class="user-name mb-0">Administrador</p>
+                    <p class="user-role mb-0"><span class="status-badge"></span> Activo</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-action">
+                <i class="bi bi-bell"></i>
+                <span class="sidebar-text">Notificaciones</span>
+            </div>
+            
+            <div class="sidebar-action">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="sidebar-text">Cerrar Sesión</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pagina Principal -->
+    <div id="content">
+        <!-- Sección Superior -->
+        <nav class="top-navbar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <button id="sidebarToggle" class="btn btn-sm btn-outline-secondary me-3">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <nav aria-label="breadcrumb" class="flex-grow-1">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">Administrador</li>
+                                <li class="breadcrumb-item active">Pedidos y Entregas</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="date-display me-3" id="currentDate"></span>
+                        <div class="notification-badge d-inline-block">
+                            <i class="bi bi-bell fs-5 text-muted"></i>
+                            <span class="badge bg-danger rounded-pill">3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido de Entregas -->
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Pedidos y Entregas</h2>
+                    <button class="btn btn-primary" onclick="cargarCompras()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Actualizar
+                    </button>
+                </div>
+                
+                <!-- Resumen -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title" id="totalPedidos">0</h4>
+                                        <p class="card-text mb-0">Total Pedidos</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="bi bi-cart-check fs-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title" id="totalVentas">S/ 0.00</h4>
+                                        <p class="card-text mb-0">Total Ventas</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="bi bi-currency-dollar fs-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title" id="totalDelivery">0</h4>
+                                        <p class="card-text mb-0">Entregas a Domicilio</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="bi bi-truck fs-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabla de Pedidos -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Lista de Pedidos</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID Compra</th>
+                                        <th>Cliente</th>
+                                        <th>Tipo Envío</th>
+                                        <th>Método Pago</th>
+                                        <th>Fecha</th>
+                                        <th>Total</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaPedidos">
+                                    <tr>
+                                        <td colspan="7" class="text-center">Cargando pedidos...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Pedido -->
+    <div class="modal fade" id="modalDetallePedido" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Detalle del Pedido</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="detallePedidoBody">
+                    <!-- Contenido dinámico -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="JS/main.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let compras = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarCompras();
+        });
+
+        async function cargarCompras() {
+            try {
+                const response = await fetch(`${API_BASE}/compras/todas`);
+                if (!response.ok) throw new Error('Error al cargar compras');
+                compras = await response.json();
+                renderizarCompras();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('tablaPedidos').innerHTML = 
+                    '<tr><td colspan="7" class="text-center text-danger">Error al cargar pedidos. Verifica que el backend esté corriendo.</td></tr>';
+            }
+        }
+
+        function renderizarCompras() {
+            const tbody = document.getElementById('tablaPedidos');
+            
+            if (compras.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay pedidos registrados</td></tr>';
+                document.getElementById('totalPedidos').textContent = '0';
+                document.getElementById('totalVentas').textContent = 'S/ 0.00';
+                document.getElementById('totalDelivery').textContent = '0';
+                return;
+            }
+
+            // Calcular totales
+            let totalVentas = 0;
+            let totalDelivery = 0;
+            compras.forEach(c => {
+                totalVentas += parseFloat(c.precioTotal || 0);
+                if (c.tipoEnvio && c.tipoEnvio.toLowerCase().includes('delivery')) {
+                    totalDelivery++;
+                }
+            });
+
+            document.getElementById('totalPedidos').textContent = compras.length;
+            document.getElementById('totalVentas').textContent = `S/ ${totalVentas.toFixed(2)}`;
+            document.getElementById('totalDelivery').textContent = totalDelivery;
+
+            tbody.innerHTML = compras.map(compra => `
+                <tr>
+                    <td><strong>#${compra.idCompra}</strong></td>
+                    <td>${compra.nombreUsuario || 'Cliente'}</td>
+                    <td><span class="badge bg-info">${compra.tipoEnvio || 'N/A'}</span></td>
+                    <td>${compra.metodoPago || 'N/A'}</td>
+                    <td>${formatearFecha(compra.fechaCompra)}</td>
+                    <td><strong>S/ ${parseFloat(compra.precioTotal || 0).toFixed(2)}</strong></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="verDetalle(${compra.idCompra})">
+                            <i class="bi bi-eye"></i> Ver
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function verDetalle(id) {
+            const compra = compras.find(c => c.idCompra === id);
+            if (!compra) return;
+
+            let itemsHtml = '<p class="text-muted">Sin items</p>';
+            if (compra.items && compra.items.length > 0) {
+                itemsHtml = `
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Tamaño</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${compra.items.map(item => `
+                                <tr>
+                                    <td>${item.nombreProducto || 'Producto'}</td>
+                                    <td>${item.nombreTamanio || '-'}</td>
+                                    <td>${item.cantidad}</td>
+                                    <td>S/ ${parseFloat(item.precioUnitario || 0).toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            document.getElementById('detallePedidoBody').innerHTML = `
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>ID Compra:</strong> #${compra.idCompra}</p>
+                        <p><strong>Cliente:</strong> ${compra.nombreUsuario || 'Cliente'}</p>
+                        <p><strong>Fecha:</strong> ${formatearFecha(compra.fechaCompra)}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Tipo Envío:</strong> ${compra.tipoEnvio || 'N/A'}</p>
+                        <p><strong>Método Pago:</strong> ${compra.metodoPago || 'N/A'}</p>
+                        <p><strong>Total:</strong> <span class="text-success fs-5">S/ ${parseFloat(compra.precioTotal || 0).toFixed(2)}</span></p>
+                    </div>
+                </div>
+                <hr>
+                <h6>Items del Pedido:</h6>
+                ${itemsHtml}
+            `;
+
+            new bootstrap.Modal(document.getElementById('modalDetallePedido')).show();
+        }
+
+        function formatearFecha(fecha) {
+            if (!fecha) return '-';
+            const d = new Date(fecha);
+            return d.toLocaleString('es-PE', { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Nonna's Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="CSS/Reportes.css">  
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img class="img-fluid" src="Imagenes/nonnaLogo.png">
+            </div>
+            <h5 class="sidebar-text mb-0">Nonna's Pizza</h5>
+            <small class="sidebar-text">Panel de gestión</small>
+        </div>
+        
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="Dashboard.html">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="PuntoVenta.html">
+                        <i class="bi bi-cash-coin"></i>
+                        <span class="sidebar-text">Punto de Venta</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Entregas.html">
+                        <i class="bi bi-truck"></i>
+                        <span class="sidebar-text">Entregas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Inventario.html">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="sidebar-text">Catalogo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="Reportes.html">
+                        <i class="bi bi-clipboard-data"></i>
+                        <span class="sidebar-text">Reportes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Configuracion.html">
+                        <i class="bi bi-gear"></i>
+                        <span class="sidebar-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar"><img class="img-fluid" src="Imagenes/Perfil2.jpg"></div>
+                <div class="user-details sidebar-text">
+                    <p class="user-name mb-0">Administrador</p>
+                    <p class="user-role mb-0"><span class="status-badge"></span> Activo</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-action">
+                <i class="bi bi-bell"></i>
+                <span class="sidebar-text">Notificaciones</span>
+            </div>
+            
+            <div class="sidebar-action">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="sidebar-text">Cerrar Sesión</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pagina Principal -->
+    <div id="content">
+        <!-- Sección Superior -->
+        <nav class="top-navbar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <button id="sidebarToggle" class="btn btn-sm btn-outline-secondary me-3">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <nav aria-label="breadcrumb" class="flex-grow-1">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">Administrador</li>
+                                <li class="breadcrumb-item active">Reportes</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="date-display me-3" id="currentDate"></span>
+                        <div class="notification-badge d-inline-block">
+                            <i class="bi bi-bell fs-5 text-muted"></i>
+                            <span class="badge bg-danger rounded-pill">3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Contenido de Módulo de Reportes -->
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- Encabezado y Botones -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Reportes y Análisis</h2>
+                    <div>
+                        <button class="btn btn-outline-primary me-2">
+                            <i class="bi bi-file-earmark-pdf me-2"></i>Exportar PDF
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="bi bi-calendar-range me-2"></i>Personalizar Periodo
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Tarjetas de Periodos de Venta y Órdenes -->
+                <div class="row mb-5">
+                    <div class="col-md-3 mb-4">
+                        <div class="card periodo-card bg-light" id="periodoHoy">
+                            <div class="periodo-titulo">Hoy</div>
+                            <div class="periodo-valor">S/ 0.00</div>
+                            <div class="periodo-detalle">
+                                <i class="fa-solid fa-pizza-slice me-2"></i>
+                                <span>0 órdenes</span>
+                            </div>
+                            <div class="periodo-trend trend-positive">
+                                <i class="bi bi-arrow-up-right me-1"></i>
+                                0%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card periodo-card bg-light" id="periodoSemana">
+                            <div class="periodo-titulo">Esta Semana</div>
+                            <div class="periodo-valor">S/ 0.00</div>
+                            <div class="periodo-detalle">
+                                <i class="fa-solid fa-pizza-slice me-2"></i>
+                                <span>0 órdenes</span>
+                            </div>
+                            <div class="periodo-trend trend-positive">
+                                <i class="bi bi-arrow-up-right me-1"></i>
+                                0%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card periodo-card bg-light" id="periodoMes">
+                            <div class="periodo-titulo">Este Mes</div>
+                            <div class="periodo-valor">S/ 0.00</div>
+                            <div class="periodo-detalle">
+                                <i class="fa-solid fa-pizza-slice me-2"></i>
+                                <span>0 órdenes</span>
+                            </div>
+                            <div class="periodo-trend trend-positive">
+                                <i class="bi bi-arrow-up-right me-1"></i>
+                                0%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card periodo-card bg-light" id="periodoAnio">
+                            <div class="periodo-titulo">Este Año</div>
+                            <div class="periodo-valor">S/ 0.00</div>
+                            <div class="periodo-detalle">
+                                <i class="fa-solid fa-pizza-slice me-2"></i>
+                                <span>0 órdenes</span>
+                            </div>
+                            <div class="periodo-trend trend-positive">
+                                <i class="bi bi-arrow-up-right me-1"></i>
+                                0%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Productos Más Vendidos -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h5 class="mb-0">Productos Más Vendidos (Este Mes)</h5>
+                    </div>
+                    <div class="card-body" id="productosMasVendidos">
+                        <p class="text-center text-muted">Cargando productos...</p>
+                    </div>
+                </div>
+                
+                <!-- Ventas por Método de Pago -->
+                <div class="card mb-5">
+                    <div class="card-header d-flex align-items-center">
+                        <i class="bi bi-wallet2 me-2"></i>
+                        <span>Ventas por Método de Pago (Este Mes)</span>
+                    </div>
+                    <div class="card-body" id="metodosPago">
+                        <p class="text-center text-muted">Cargando métodos de pago...</p>
+                    </div>
+                </div>
+                
+                <!-- Análisis de Ventas por Horarios -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Análisis de Ventas por Horarios (Este Mes)</h5>
+                    </div>
+                    <div class="card-body" id="ventasPorHora">
+                        <p class="text-center text-muted">Cargando datos...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="JS/main.js"></script>
+    <script src="JS/Reportes.js"></script>
+</body>
+</html>

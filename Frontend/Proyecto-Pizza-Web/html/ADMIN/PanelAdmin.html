@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Nonna's Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="CSS/PanelAdmin.css">  
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img class="img-fluid" src="Imagenes/nonnaLogo.png">
+            </div>
+            <h5 class="sidebar-text mb-0">Nonna's Pizza</h5>
+            <small class="sidebar-text">Panel de gestión</small>
+        </div>
+        
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="Dashboard.html">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="PuntoVenta.html">
+                        <i class="bi bi-cash-coin"></i>
+                        <span class="sidebar-text">Punto de Venta</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Entregas.html">
+                        <i class="bi bi-truck"></i>
+                        <span class="sidebar-text">Entregas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Inventario.html">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="sidebar-text">Inventario</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Configuracion.html">
+                        <i class="bi bi-gear"></i>
+                        <span class="sidebar-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar"><img class="img-fluid" src="Imagenes/Perfil2.jpg"></div>
+                <div class="user-details sidebar-text">
+                    <p class="user-name mb-0">Administrador</p>
+                    <p class="user-role mb-0"><span class="status-badge"></span> Activo</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-action">
+                <i class="bi bi-bell"></i>
+                <span class="sidebar-text">Notificaciones</span>
+            </div>
+            
+            <div class="sidebar-action">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="sidebar-text">Cerrar Sesión</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pagina Principal -->
+    <div id="content">
+        <!-- Sección Superior -->
+        <nav class="top-navbar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <button id="sidebarToggle" class="btn btn-sm btn-outline-secondary me-3">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <nav aria-label="breadcrumb" class="flex-grow-1">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">Administrador</li>
+                                <li class="breadcrumb-item">Frank Vidal</li>
+                                <li class="breadcrumb-item active">Inventario</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="date-display me-3" id="currentDate"></span>
+                        <div class="notification-badge d-inline-block">
+                            <i class="bi bi-bell fs-5 text-muted"></i>
+                            <span class="badge bg-danger rounded-pill">3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Contenido de Inventario -->
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Gestión de Inventario</h2>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i> Agregar Producto
+                    </button>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title">152</h4>
+                                        <p class="card-text mb-0">Total Productos</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="bi bi-box-seam fs-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title">28</h4>
+                                        <p class="card-text mb-0">Stock Bajo</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="bi bi-check-circle fs-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title">5</h4>
+                                        <p class="card-text mb-0">Ordenes Pendientes</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="bi bi-exclamation-triangle fs-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title">3</h4>
+                                        <p class="card-text mb-0">Valor Inventariado</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="bi bi-x-circle fs-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Lista de Productos</h5>
+                        <div class="input-group w-auto">
+                            <input type="text" class="form-control" placeholder="Buscar producto...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Stock</th>
+                                        <th>Precio</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#PZ001</td>
+                                        <td>Pizza Hawaiana Grande</td>
+                                        <td>Pizzas</td>
+                                        <td>15</td>
+                                        <td>S/ 35.00</td>
+                                        <td><span class="badge bg-success">En Stock</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#PZ002</td>
+                                        <td>Pizza Pepperoni Mediana</td>
+                                        <td>Pizzas</td>
+                                        <td>8</td>
+                                        <td>S/ 28.00</td>
+                                        <td><span class="badge bg-success">En Stock</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#BG001</td>
+                                        <td>Bebida Gaseosa 1.5L</td>
+                                        <td>Bebidas</td>
+                                        <td>3</td>
+                                        <td>S/ 8.00</td>
+                                        <td><span class="badge bg-warning">Stock Bajo</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#PS001</td>
+                                        <td>Pan con Ajo</td>
+                                        <td>Acompañamientos</td>
+                                        <td>0</td>
+                                        <td>S/ 12.00</td>
+                                        <td><span class="badge bg-danger">Agotado</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#PZ003</td>
+                                        <td>Pizza Vegetariana Familiar</td>
+                                        <td>Pizzas</td>
+                                        <td>22</td>
+                                        <td>S/ 42.00</td>
+                                        <td><span class="badge bg-success">En Stock</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="JS/main.js"></script>
+</body>
+</html>

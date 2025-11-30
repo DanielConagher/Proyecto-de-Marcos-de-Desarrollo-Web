@@ -17,11 +17,14 @@ public class Producto {
     @Column(name = "id_Producto")
     private Long idProducto;
 
+    @Column(name = "nombre")
     private String nombre;
 
     @Lob
+    @Column(name = "imagen")
     private byte[] imagen;
 
+    @Column(name = "descripcion")
     private String descripcion;
 
 

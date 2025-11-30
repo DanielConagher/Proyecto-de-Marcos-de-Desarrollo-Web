@@ -12,8 +12,8 @@ public class ExtraMapper {
             return null;
         }
         ExtraDTO dto = new ExtraDTO();
-        dto.setNombre(extra.getNombre_extra());
-        dto.setPrecio(extra.getPrecio_venta());
+        dto.setNombre(extra.getNombreExtra());
+        dto.setPrecio(extra.getPrecioVenta());
         return dto;
     }
 }

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Venta - Nonna's Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/PuntoVenta.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img class="img-fluid" src="imagenes/nonnaLogo.png" alt="Logo">
+            </div>
+            <h5 class="sidebar-text mb-0">Nonna's Pizza</h5>
+            <small class="sidebar-text">Panel de gestión</small>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="Dashboard.html">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="PuntoVenta.html">
+                        <i class="bi bi-cash-coin"></i>
+                        <span class="sidebar-text">Punto de Venta</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Entregas.html">
+                        <i class="bi bi-truck"></i>
+                        <span class="sidebar-text">Entregas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Inventario.html">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="sidebar-text">Catalogo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Configuracion.html">
+                        <i class="bi bi-gear"></i>
+                        <span class="sidebar-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar"><img class="img-fluid" src="imagenes/Perfil2.jpg"></div>
+                <div class="user-details sidebar-text">
+                    <p class="user-name mb-0">Administrador</p>
+                    <p class="user-role mb-0"><span class="status-badge"></span> Activo</p>
+                </div>
+            </div>
+            <div class="sidebar-action">
+                <i class="bi bi-bell"></i>
+                <span class="sidebar-text">Notificaciones</span>
+            </div>
+            <div class="sidebar-action">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="sidebar-text">Cerrar Sesión</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div id="content">
+        <!-- Sección Superior -->
+        <nav class="top-navbar">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <button id="sidebarToggle" class="btn btn-sm btn-outline-secondary me-3">
+                        <i class="bi bi-list"></i>
+                        </button>
+                        <nav aria-label="breadcrumb" class="flex-grow-1">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">Administrador</li>
+                                <li class="breadcrumb-item active">Punto de Venta</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="date-display me-3" id="currentDate"></span>
+                        <div class="notification-badge d-inline-block">
+                            <i class="bi bi-bell fs-5 text-muted"></i>
+                            <span class="badge bg-danger rounded-pill" id="cartCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Punto de Venta -->
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Columna Izquierda -->
+                    <div class="col-lg-8">
+                        <!-- Encabezado -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2>Punto de Venta</h2>
+                            <div class="input-group w-auto">
+                                <input type="text" class="form-control" placeholder="Buscar producto..." id="buscarProducto">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Categorías de Productos -->
+                        <div class="categorias-venta mb-3">
+                            <button class="categoria-btn active" data-categoria="todos">Todos</button>
+                            <button class="categoria-btn" data-categoria="pizzas">Pizzas</button>
+                            <button class="categoria-btn" data-categoria="promociones">Promociones</button>
+                        </div>
+                        
+                        <!-- Grid de Productos -->
+                        <div class="row" id="productos-container">
+                            <div class="col-12 text-center py-5">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <p class="mt-2">Cargando productos...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Columna Derecha -->
+                    <div class="col-lg-4">
+                        <!-- Orden Actual -->
+                        <div class="card orden-card mb-4">
+                            <div class="orden-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi bi-cart3"></i>
+                                    <span>Orden Actual</span>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger" onclick="limpiarCarrito()" title="Limpiar carrito">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                            <div class="orden-body" id="carrito-items">
+                                <div class="carrito-vacio">
+                                    <i class="bi bi-cart-x"></i>
+                                    <p>No hay productos en el carrito</p>
+                                </div>
+                            </div>
+                            <div class="orden-footer p-3" id="orden-footer" style="display: none;">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">S/ 0.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <strong>Total:</strong>
+                                    <strong id="total">S/ 0.00</strong>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tipo de pedido:</label>
+                                    <select class="form-select" id="tipoEnvio">
+                                        <option value="Local" selected>🍽️ En el local</option>
+                                        <option value="Para llevar">📦 Para llevar</option>
+                                        <option value="Delivery">🛵 Delivery</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Método de pago:</label>
+                                    <select class="form-select" id="metodoPago">
+                                        <option value="Efectivo">💵 Efectivo</option>
+                                        <option value="Tarjeta">💳 Tarjeta</option>
+                                        <option value="Yape">📱 Yape</option>
+                                        <option value="Plin">📱 Plin</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-success w-100 btn-lg" onclick="procesarCompra()">
+                                    <i class="bi bi-bag-check me-2"></i>Confirmar Venta
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Órdenes Recientes -->
+                        <div class="card orden-card">
+                            <div class="orden-header">
+                                <i class="bi bi-clock-history"></i>
+                                <span>Últimas Órdenes</span>
+                            </div>
+                            <div class="orden-body" id="ordenes-recientes">
+                                <div class="text-center text-muted py-3">
+                                    <i class="bi bi-hourglass"></i>
+                                    <p class="small mb-0">Cargando órdenes...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Seleccionar Tamaño -->
+    <div class="modal fade" id="modalTamanio" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Seleccionar Tamaño</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 id="modalProductoNombre" class="mb-3"></h6>
+                    <div id="tamaniosContainer">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Cantidad:</label>
+                        <div class="input-group" style="width: 150px;">
+                            <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidadModal(-1)">-</button>
+                            <input type="number" class="form-control text-center" id="cantidadModal" value="1" min="1">
+                            <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidadModal(1)">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmarAgregarAlCarrito()">
+                        <i class="bi bi-cart-plus me-1"></i>Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let productos = [];
+        let promociones = [];
+        let carrito = [];
+        let productoSeleccionado = null;
+        let promocionSeleccionada = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarProductos();
+            cargarPromociones();
+            cargarOrdenesRecientes();
+            
+            // Filtro de búsqueda
+            document.getElementById('buscarProducto').addEventListener('input', filtrarProductos);
+            
+            // Categorías
+            document.querySelectorAll('.categoria-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    filtrarProductos();
+                });
+            });
+        });
+
+        async function cargarProductos() {
+            try {
+                const response = await fetch(`${API_BASE}/productos`);
+                if (response.ok) {
+                    productos = await response.json();
+                    renderizarProductos();
+                }
+            } catch (error) {
+                console.error('Error cargando productos:', error);
+                document.getElementById('productos-container').innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            No se pudo conectar con el servidor
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        async function cargarPromociones() {
+            try {
+                const response = await fetch(`${API_BASE}/promociones`);
+                if (response.ok) {
+                    const todasPromociones = await response.json();
+                    // Filtrar solo promociones activas (vigentes)
+                    const hoy = new Date();
+                    promociones = todasPromociones.filter(p => {
+                        const inicio = new Date(p.fechaInicio);
+                        const fin = new Date(p.fechaFin);
+                        return hoy >= inicio && hoy <= fin;
+                    });
+                    renderizarProductos();
+                }
+            } catch (error) {
+                console.error('Error cargando promociones:', error);
+            }
+        }
+
+        async function cargarOrdenesRecientes() {
+            try {
+                const response = await fetch(`${API_BASE}/compras/todas`);
+                if (response.ok) {
+                    const compras = await response.json();
+                    renderizarOrdenesRecientes(compras.slice(-5).reverse());
+                }
+            } catch (error) {
+                console.error('Error cargando órdenes:', error);
+            }
+        }
+
+        function renderizarProductos() {
+            const container = document.getElementById('productos-container');
+            const busqueda = document.getElementById('buscarProducto').value.toLowerCase();
+            const categoria = document.querySelector('.categoria-btn.active').dataset.categoria;
+            
+            let items = [];
+            
+            // Agregar productos (pizzas)
+            if (categoria === 'todos' || categoria === 'pizzas') {
+                productos.forEach(p => {
+                    if (!busqueda || p.nombre.toLowerCase().includes(busqueda)) {
+                        items.push({
+                            tipo: 'producto',
+                            data: p
+                        });
+                    }
+                });
+            }
+            
+            // Agregar promociones
+            if (categoria === 'todos' || categoria === 'promociones') {
+                promociones.forEach(promo => {
+                    if (!busqueda || promo.nombre.toLowerCase().includes(busqueda)) {
+                        items.push({
+                            tipo: 'promocion',
+                            data: promo
+                        });
+                    }
+                });
+            }
+            
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-search fs-1 text-muted"></i>
+                        <p class="mt-2">No se encontraron productos</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = items.map(item => {
+                if (item.tipo === 'producto') {
+                    const p = item.data;
+                    const precioBase = p.precios && p.precios.length > 0 
+                        ? Math.min(...p.precios.map(pr => pr.precio)) 
+                        : 0;
+                    const primerPrecio = p.precios && p.precios.length > 0 ? p.precios[0] : null;
+                    const imagenSrc = p.imagenBase64 
+                        ? `data:image/jpeg;base64,${p.imagenBase64}` 
+                        : 'Imagenes/pizza.png';
+                    
+                    // Generar opciones de tamaño si hay más de uno
+                    const tieneMultiplesTamanios = p.precios && p.precios.length > 1;
+                    
+                    return `
+                        <div class="col-6 mb-3">
+                            <div class="card producto-card">
+                                <div class="producto-imagen" onclick="seleccionarProducto(${p.idProducto})">
+                                    <img src="${imagenSrc}" alt="${p.nombre}" onerror="this.src='Imagenes/pizza.png'">
+                                </div>
+                                <div class="producto-body">
+                                    <div class="producto-nombre">${p.nombre}</div>
+                                    <div class="producto-descripcion">${p.descripcion || 'Deliciosa pizza'}</div>
+                                    <div class="producto-precio">S/ ${precioBase.toFixed(2)}</div>
+                                    ${tieneMultiplesTamanios ? 
+                                        `<button class="btn btn-warning btn-agregar w-100" onclick="seleccionarProducto(${p.idProducto})">
+                                            <i class="bi bi-plus-circle me-1"></i>Elegir tamaño
+                                        </button>` :
+                                        `<button class="btn btn-success btn-agregar w-100" onclick="agregarProductoRapido(${p.idProducto})">
+                                            <i class="bi bi-cart-plus me-1"></i>Agregar
+                                        </button>`
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Promoción
+                    const promo = item.data;
+                    const promoImagen = (promo.imagenReferencia && !promo.imagenReferencia.includes('/img/')) 
+                        ? promo.imagenReferencia 
+                        : 'Imagenes/pizza.png';
+                    return `
+                        <div class="col-6 mb-3">
+                            <div class="card producto-card border-warning">
+                                <div class="producto-imagen position-relative" onclick="seleccionarPromocion(${promo.idPromocion})">
+                                    <img src="${promoImagen}" alt="${promo.nombre}" onerror="this.src='Imagenes/pizza.png'">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                                        -${promo.descuentoPorcentaje}%
+                                    </span>
+                                </div>
+                                <div class="producto-body">
+                                    <div class="producto-nombre text-warning">${promo.nombre}</div>
+                                    <div class="producto-descripcion">${promo.descripcion || 'Promoción especial'}</div>
+                                    <button class="btn btn-danger btn-agregar w-100" onclick="seleccionarPromocion(${promo.idPromocion})">
+                                        <i class="bi bi-percent me-1"></i>Aplicar -${promo.descuentoPorcentaje}%
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        function filtrarProductos() {
+            renderizarProductos();
+        }
+
+        // Agregar producto rápido (cuando solo tiene un tamaño)
+        function agregarProductoRapido(idProducto) {
+            const producto = productos.find(p => p.idProducto === idProducto);
+            if (!producto || !producto.precios || producto.precios.length === 0) return;
+            
+            const precio = producto.precios[0]; // Tomar el primer/único precio
+            
+            // Buscar si ya existe en el carrito
+            const itemExistente = carrito.find(item => 
+                item.tipo === 'producto' && 
+                item.idProducto === producto.idProducto && 
+                item.idTamanio === precio.idTamanio
+            );
+            
+            if (itemExistente) {
+                itemExistente.cantidad++;
+            } else {
+                carrito.push({
+                    tipo: 'producto',
+                    idProducto: producto.idProducto,
+                    nombre: producto.nombre,
+                    idTamanio: precio.idTamanio,
+                    nombreTamanio: precio.nombreTamanio,
+                    precio: parseFloat(precio.precio),
+                    cantidad: 1
+                });
+            }
+            
+            actualizarCarrito();
+            
+            // Feedback visual
+            mostrarNotificacion(`${producto.nombre} agregado al carrito`);
+        }
+        
+        function mostrarNotificacion(mensaje) {
+            // Crear notificación temporal
+            const notif = document.createElement('div');
+            notif.className = 'position-fixed bottom-0 end-0 p-3';
+            notif.style.zIndex = '9999';
+            notif.innerHTML = `
+                <div class="toast show bg-success text-white" role="alert">
+                    <div class="toast-body">
+                        <i class="bi bi-check-circle me-2"></i>${mensaje}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 2000);
+        }
+
+        function seleccionarProducto(idProducto) {
+            productoSeleccionado = productos.find(p => p.idProducto === idProducto);
+            promocionSeleccionada = null;
+            if (!productoSeleccionado) return;
+            
+            document.getElementById('modalProductoNombre').textContent = productoSeleccionado.nombre;
+            document.getElementById('cantidadModal').value = 1;
+            
+            const tamaniosContainer = document.getElementById('tamaniosContainer');
+            
+            if (productoSeleccionado.precios && productoSeleccionado.precios.length > 0) {
+                tamaniosContainer.innerHTML = productoSeleccionado.precios.map((precio, index) => `
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="tamanio" 
+                               id="tamanio${index}" value="${precio.idTamanio}"
+                               data-precio="${precio.precio}" 
+                               data-nombre="${precio.nombreTamanio}"
+                               ${index === 0 ? 'checked' : ''}>
+                        <label class="form-check-label" for="tamanio${index}">
+                            ${precio.nombreTamanio} - <strong>S/ ${parseFloat(precio.precio).toFixed(2)}</strong>
+                        </label>
+                    </div>
+                `).join('');
+            } else {
+                tamaniosContainer.innerHTML = '<p class="text-muted">No hay tamaños disponibles</p>';
+            }
+            
+            new bootstrap.Modal(document.getElementById('modalTamanio')).show();
+        }
+
+        function seleccionarPromocion(idPromocion) {
+            promocionSeleccionada = promociones.find(p => p.idPromocion === idPromocion);
+            productoSeleccionado = null;
+            if (!promocionSeleccionada) return;
+            
+            // Agregar promoción directamente al carrito
+            const itemExistente = carrito.find(item => 
+                item.tipo === 'promocion' && item.idPromocion === promocionSeleccionada.idPromocion
+            );
+            
+            if (itemExistente) {
+                itemExistente.cantidad++;
+            } else {
+                // Por ahora las promociones no tienen precio fijo, solo descuento
+                // Usaremos un precio base de ejemplo o se podría calcular
+                carrito.push({
+                    tipo: 'promocion',
+                    idPromocion: promocionSeleccionada.idPromocion,
+                    nombre: promocionSeleccionada.nombre,
+                    descripcion: promocionSeleccionada.descripcion,
+                    descuento: promocionSeleccionada.descuentoPorcentaje,
+                    precio: 0, // Las promociones aplican descuento sobre el total
+                    cantidad: 1
+                });
+            }
+            
+            actualizarCarrito();
+            
+            // Mostrar mensaje de confirmación
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 end-0 p-3';
+            toast.style.zIndex = '11';
+            toast.innerHTML = `
+                <div class="toast show" role="alert">
+                    <div class="toast-header bg-warning text-dark">
+                        <i class="bi bi-percent me-2"></i>
+                        <strong class="me-auto">Promoción Agregada</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${promocionSeleccionada.nombre} - ${promocionSeleccionada.descuentoPorcentaje}% de descuento
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function cambiarCantidadModal(delta) {
+            const input = document.getElementById('cantidadModal');
+            const newVal = parseInt(input.value) + delta;
+            if (newVal >= 1) input.value = newVal;
+        }
+
+        function confirmarAgregarAlCarrito() {
+            const tamanioRadio = document.querySelector('input[name="tamanio"]:checked');
+            if (!tamanioRadio || !productoSeleccionado) return;
+            
+            const cantidad = parseInt(document.getElementById('cantidadModal').value);
+            const precio = parseFloat(tamanioRadio.dataset.precio);
+            const nombreTamanio = tamanioRadio.dataset.nombre;
+            
+            const itemExistente = carrito.find(item => 
+                item.tipo === 'producto' && 
+                item.idProducto === productoSeleccionado.idProducto &&
+                item.nombreTamanio === nombreTamanio
+            );
+            
+            if (itemExistente) {
+                itemExistente.cantidad += cantidad;
+            } else {
+                carrito.push({
+                    tipo: 'producto',
+                    idProducto: productoSeleccionado.idProducto,
+                    nombre: productoSeleccionado.nombre,
+                    nombreTamanio: nombreTamanio,
+                    idTamanio: parseInt(tamanioRadio.value),
+                    precio: precio,
+                    cantidad: cantidad
+                });
+            }
+            
+            actualizarCarrito();
+            bootstrap.Modal.getInstance(document.getElementById('modalTamanio')).hide();
+        }
+
+        function actualizarCarrito() {
+            const container = document.getElementById('carrito-items');
+            const footer = document.getElementById('orden-footer');
+            const countBadge = document.getElementById('cartCount');
+            
+            const itemsProductos = carrito.filter(item => item.tipo === 'producto');
+            const itemsPromociones = carrito.filter(item => item.tipo === 'promocion');
+            
+            countBadge.textContent = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+            
+            if (carrito.length === 0) {
+                container.innerHTML = `
+                    <div class="carrito-vacio">
+                        <i class="bi bi-cart-x"></i>
+                        <p>No hay productos en el carrito</p>
+                    </div>
+                `;
+                footer.style.display = 'none';
+                return;
+            }
+            
+            footer.style.display = 'block';
+            
+            let html = '';
+            
+            // Mostrar productos
+            itemsProductos.forEach((item, index) => {
+                const realIndex = carrito.indexOf(item);
+                html += `
+                    <div class="carrito-item d-flex justify-content-between align-items-center p-2 border-bottom">
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">${item.nombre}</div>
+                            <small class="text-muted">${item.nombreTamanio}</small>
+                            <div>S/ ${item.precio.toFixed(2)} x ${item.cantidad}</div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-secondary me-1" onclick="cambiarCantidad(${realIndex}, -1)">-</button>
+                            <span class="mx-2">${item.cantidad}</span>
+                            <button class="btn btn-sm btn-outline-secondary me-1" onclick="cambiarCantidad(${realIndex}, 1)">+</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarItem(${realIndex})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Mostrar promociones aplicadas
+            if (itemsPromociones.length > 0) {
+                html += `<div class="p-2 bg-warning bg-opacity-10"><small class="text-warning fw-bold"><i class="bi bi-percent"></i> Promociones aplicadas:</small></div>`;
+                itemsPromociones.forEach((item, index) => {
+                    const realIndex = carrito.indexOf(item);
+                    html += `
+                        <div class="carrito-item d-flex justify-content-between align-items-center p-2 border-bottom bg-warning bg-opacity-10">
+                            <div class="flex-grow-1">
+                                <div class="fw-bold text-warning">${item.nombre}</div>
+                                <small class="text-danger">-${item.descuento}% descuento</small>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-danger" onclick="eliminarItem(${realIndex})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            container.innerHTML = html;
+            
+            // Calcular totales
+            const subtotal = itemsProductos.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            
+            // Aplicar descuento de promociones (suma de todos los descuentos)
+            const descuentoTotal = itemsPromociones.reduce((sum, promo) => sum + promo.descuento, 0);
+            const descuentoAplicado = subtotal * (descuentoTotal / 100);
+            const total = subtotal - descuentoAplicado;
+            
+            document.getElementById('subtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
+            
+            // Mostrar descuento si hay promociones
+            let descuentoHtml = '';
+            if (descuentoTotal > 0) {
+                descuentoHtml = `
+                    <div class="d-flex justify-content-between mb-2 text-danger">
+                        <span>Descuento (${descuentoTotal}%):</span>
+                        <span>- S/ ${descuentoAplicado.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+            
+            // Actualizar el footer con el descuento
+            const subtotalDiv = document.getElementById('subtotal').parentElement;
+            const existingDescuento = document.getElementById('descuento-row');
+            if (existingDescuento) existingDescuento.remove();
+            
+            if (descuentoTotal > 0) {
+                const descuentoRow = document.createElement('div');
+                descuentoRow.id = 'descuento-row';
+                descuentoRow.className = 'd-flex justify-content-between mb-2 text-danger';
+                descuentoRow.innerHTML = `
+                    <span>Descuento (${descuentoTotal}%):</span>
+                    <span>- S/ ${descuentoAplicado.toFixed(2)}</span>
+                `;
+                subtotalDiv.after(descuentoRow);
+            }
+            
+            document.getElementById('total').textContent = `S/ ${total.toFixed(2)}`;
+        }
+
+        function cambiarCantidad(index, delta) {
+            const newCantidad = carrito[index].cantidad + delta;
+            if (newCantidad <= 0) {
+                eliminarItem(index);
+            } else {
+                carrito[index].cantidad = newCantidad;
+                actualizarCarrito();
+            }
+        }
+
+        function eliminarItem(index) {
+            carrito.splice(index, 1);
+            actualizarCarrito();
+        }
+
+        function limpiarCarrito() {
+            if (carrito.length === 0) return;
+            if (confirm('¿Desea limpiar el carrito?')) {
+                carrito = [];
+                actualizarCarrito();
+            }
+        }
+
+        async function procesarCompra() {
+            const itemsProductos = carrito.filter(item => item.tipo === 'producto');
+            
+            if (itemsProductos.length === 0) {
+                alert('Debe agregar al menos un producto (pizza) al carrito');
+                return;
+            }
+            
+            const tipoEnvio = document.getElementById('tipoEnvio').value;
+            const metodoPago = document.getElementById('metodoPago').value;
+            
+            // Calcular total con descuentos
+            const subtotal = itemsProductos.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            const itemsPromociones = carrito.filter(item => item.tipo === 'promocion');
+            const descuentoTotal = itemsPromociones.reduce((sum, promo) => sum + promo.descuento, 0);
+            const total = subtotal - (subtotal * descuentoTotal / 100);
+            
+            // Preparar datos de compra
+            const compraData = {
+                precioTotal: total,
+                tipoEnvio: tipoEnvio,
+                metodoPago: metodoPago,
+                fechaCompra: new Date().toISOString(),
+                productos: itemsProductos.map(item => ({
+                    idProducto: item.idProducto,
+                    idTamanio: item.idTamanio,
+                    cantidad: item.cantidad,
+                    precioUnitario: item.precio
+                }))
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/compras`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(compraData)
+                });
+                
+                if (response.ok) {
+                    const resultado = await response.json();
+                    const tipoTexto = tipoEnvio === 'Local' ? 'Mesa en local' : tipoEnvio;
+                    alert(`✅ ¡Venta registrada!\n\n📋 Orden #${resultado.idCompra}\n💰 Total: S/ ${total.toFixed(2)}\n📍 Tipo: ${tipoTexto}\n💳 Pago: ${metodoPago}`);
+                    carrito = [];
+                    actualizarCarrito();
+                    cargarOrdenesRecientes();
+                } else {
+                    throw new Error('Error al procesar la compra');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al procesar la compra. Intente nuevamente.');
+            }
+        }
+
+        function renderizarOrdenesRecientes(compras) {
+            const container = document.getElementById('ordenes-recientes');
+            
+            if (compras.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-muted py-3">
+                        <i class="bi bi-inbox"></i>
+                        <p class="small mb-0">No hay órdenes recientes</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = compras.map(compra => `
+                <div class="orden-pendiente-card mb-2 p-2 border rounded">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="fw-bold">#${compra.idCompra}</div>
+                            <small class="text-muted">${compra.tipoEnvio || 'Local'}</small>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold text-success">S/ ${parseFloat(compra.precioTotal || 0).toFixed(2)}</div>
+                            <span class="badge bg-success">${compra.metodoPago || 'Completado'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

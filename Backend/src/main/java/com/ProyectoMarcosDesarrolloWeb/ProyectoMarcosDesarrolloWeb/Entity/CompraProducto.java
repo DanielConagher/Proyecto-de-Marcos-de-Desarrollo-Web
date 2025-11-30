@@ -27,7 +27,7 @@ public class CompraProducto {
     private BigDecimal precio_venta; // El precio unitario al momento de la venta
     
     @ManyToOne
-    @JoinColumn(name="id_Extra")
+    @JoinColumn(name = "id_extra")
     private Extra extra;
     
     

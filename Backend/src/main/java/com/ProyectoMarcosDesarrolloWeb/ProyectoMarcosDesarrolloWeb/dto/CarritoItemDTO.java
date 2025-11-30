@@ -7,11 +7,13 @@ public class CarritoItemDTO {
     
     private Long idProducto; 
     private String nombreProducto; 
+    private Long idTamanio;
     private String tamano;
     private int cantidad;
     private BigDecimal precioUnitario; 
     private BigDecimal precioTotal;
     private List<Long> idExtras; 
+    private String imagenBase64;
 
     // Getters y Setters
     public Long getIdProducto() {
@@ -25,6 +27,12 @@ public class CarritoItemDTO {
     }
     public void setNombreProducto(String nombreProducto) {
         this.nombreProducto = nombreProducto;
+    }
+    public Long getIdTamanio() {
+        return idTamanio;
+    }
+    public void setIdTamanio(Long idTamanio) {
+        this.idTamanio = idTamanio;
     }
     public String getTamano() {
         return tamano;
@@ -56,6 +64,11 @@ public class CarritoItemDTO {
     public void setIdExtras(List<Long> idExtras) {
         this.idExtras = idExtras;
     }
-
+    public String getImagenBase64() {
+        return imagenBase64;
+    }
+    public void setImagenBase64(String imagenBase64) {
+        this.imagenBase64 = imagenBase64;
+    }
 }
     

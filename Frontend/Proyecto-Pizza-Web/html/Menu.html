@@ -12,10 +12,6 @@
     <link rel="stylesheet" href="../css/Menu/Menu.css">
 </head>
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
-
     <header>
         <div class="row justify-content-between">
             <div class="col-12 col-md-4">
@@ -80,142 +76,85 @@
     <main>
         <section class="container my-5">
         <h1 class="text-center mb-4">Nuestro Menú</h1>
-        <div class="row row-cols-1 row-cols-md-3 g-4"> <!-- G-4 es espaciado entre las columnas -->
-            <!-- Pizza 1 -->
-            <div class="col">
-                <div class="card h-100"> 
-                    <img src="../Imagenes/Pizza Margarita.jpg" class="card-img-top pizza-circular" alt="Pizza Margarita">
-                    <div class="card-body">
-                        <h5 class="card-title">Pizza Margarita</h5>
-                        <p class="card-text">Mozzarella, tomate, albahaca fresca.</p>
-                        <ul class="list-unstyled">
-                            <li><strong>Mediana:</strong> S/25</li>
-                            <li><strong>Familiar:</strong> S/35</li>
-                        </ul>
-                        <p class="card-text"><strong>Extras:</strong> Salsa BBQ + S/5, Champiñones + S/4</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <button class="btn btn-primary" onclick="agregarCarrito(this)">Agregar</button>
-                    </div>
-                </div>
+        
+        <!-- Mensaje de carga -->
+        <div id="cargando-productos" class="text-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
             </div>
-
-            <!-- Pizza 2 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="../Imagenes/Pizza Peperoni.png" class="card-img-top pizza-circular" alt="Pizza Pepperoni">
-                    <div class="card-body">
-                        <h5 class="card-title">Pizza Pepperoni</h5>
-                        <p class="card-text">Mozzarella, pepperoni, salsa especial.</p>
-                        <ul class="list-unstyled">
-                            <li><strong>Personal:</strong> S/18</li>
-                            <li><strong>Mediana:</strong> S/30</li>
-                            <li><strong>Familiar:</strong> S/40</li>
-                        </ul>
-                        <p class="card-text"><strong>Extras:</strong> Aceitunas + S/3, Jalapeños + S/4</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <button class="btn btn-primary" onclick="agregarCarrito(this)">Agregar</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pizza 3 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="../Imagenes/Pizza Hawaiana.jpg" class="card-img-top pizza-circular" alt="Pizza Hawaiana">
-                    <div class="card-body">
-                        <h5 class="card-title">Pizza Hawaiana</h5>
-                        <p class="card-text">Jamón, piña, mozzarella, salsa de tomate.</p>
-                        <ul class="list-unstyled">
-                            <li><strong>Personal:</strong> S/17</li>
-                            <li><strong>Mediana:</strong> S/28</li>
-                            <li><strong>Familiar:</strong> S/38</li>
-                        </ul>
-                        <p class="card-text"><strong>Extras:</strong> Tocino + S/5, Extra Queso + S/4</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <button class="btn btn-primary" onclick="agregarCarrito(this)">Agregar</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pizza 4 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="../Imagenes/Pizza Cuatro Quesos.png" class="card-img-top pizza-circular" alt="Pizza Cuatro Quesos">
-                    <div class="card-body">
-                        <h5 class="card-title">Pizza Cuatro Quesos</h5>
-                        <p class="card-text">Mozzarella, cheddar, parmesano, azul.</p>
-                        <ul class="list-unstyled">
-                            <li><strong>Personal:</strong> S/20</li>
-                            <li><strong>Mediana:</strong> S/32</li>
-                            <li><strong>Familiar:</strong> S/45</li>
-                        </ul>
-                        <p class="card-text"><strong>Extras:</strong> Champiñones + S/4, Aceitunas + S/3</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <button class="btn btn-primary" onclick="agregarCarrito(this)">Agregar</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pizza 5 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="../Imagenes/Pizza Vegetariana.png" class="card-img-top pizza-circular" alt="Pizza Vegetariana">
-                    <div class="card-body">
-                        <h5 class="card-title">Pizza Vegetariana</h5>
-                        <p class="card-text">Tomate, pimiento, champiñones, aceitunas, cebolla.</p>
-                        <ul class="list-unstyled">
-                            <li><strong>Personal:</strong> S/16</li>
-                            <li><strong>Mediana:</strong> S/27</li>
-                            <li><strong>Familiar:</strong> S/37</li>
-                        </ul>
-                        <p class="card-text"><strong>Extras:</strong> Extra Queso + S/4, Jalapeños + S/4</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <button class="btn btn-primary" onclick="agregarCarrito(this)">Agregar</button>
-                    </div>
-                </div>
-            </div>
+            <p class="mt-2">Cargando productos...</p>
+        </div>
+        
+        <!-- Contenedor dinámico para los productos -->
+        <div id="productos-container" class="row row-cols-1 row-cols-md-3 g-4">
+            <!-- Los productos se cargarán dinámicamente aquí -->
         </div>
     </section>
     </main>
 
-    <script> 
-        function agregarCarrito(boton) {
-            const card = boton.closest(".card");
-            const nombre = card.querySelector(".card-title").textContent;
-            const imagen = card.querySelector("img").src;
+    <!-- Modal de Opciones del Producto -->
+    <div class="modal fade" id="modalOpciones" tabindex="-1" aria-labelledby="modalOpcionesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalOpcionesLabel">Personaliza tu pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Nombre del producto -->
+                    <h4 id="nombreProductoModal" class="text-center mb-3"></h4>
+                    
+                    <!-- Opciones de Tamaño -->
+                    <h6 class="fw-bold">Selecciona un tamaño:</h6>
+                    <div id="cargandoTamanios" class="text-center my-2">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                    <div id="opcionesTamanios" class="list-group mb-3">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                    
+                    <!-- Opciones de Extras -->
+                    <h6 class="fw-bold">Extras (opcional):</h6>
+                    <div id="cargandoExtras" class="text-center my-2 d-none">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                    <div id="opcionesExtras" class="list-group mb-3">
+                        <!-- Se carga dinámicamente -->
+                    </div>
+                    
+                    <!-- Cantidad -->
+                    <h6 class="fw-bold">Cantidad:</h6>
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                        <button type="button" class="btn btn-outline-secondary" id="btnRestarCantidad">-</button>
+                        <input type="number" id="cantidadProducto" class="form-control text-center mx-2" value="1" min="1" style="width: 70px;" readonly>
+                        <button type="button" class="btn btn-outline-secondary" id="btnSumarCantidad">+</button>
+                    </div>
+                    
+                    <!-- Precio Final -->
+                    <div class="text-center">
+                        <h5>Total: <span id="precioFinalModal" class="text-success fw-bold">S/0.00</span></h5>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnAgregarAlCarrito">Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            const precioTexto = card.querySelector("ul li strong").nextSibling.textContent.trim(); /*Busca el elemento del lado inmediato del Strong*/
-            
-            const precio = parseFloat(precioTexto.replace(/[^\d.]/g, "")); /*Busca todo lo que no sea un numero (/d) y lo reemplaza con un espacio vacio. Obteniendo solo el numero*/
-            
-            const cantidadSeleccionada = 1;
-
-            if (isNaN(precio)) {
-                console.error("No se pudo obtener el precio de", nombre);
-                return;
-            }
-
-            agregarProducto(nombre, precio, imagen, cantidadSeleccionada);
-            abrirCarrito();
-        }
-    </script>
-
-    <script src="../js/Carrito/carrito.js"></script>
-
+    <!-- Bootstrap JS primero -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
-    <p></p>
-    <p></p>
-    <p></p>
-    <p></p>
-    <p></p>
-    <p></p>
+    <!-- Luego los scripts personalizados -->
+    <script src="../js/Carrito/carrito.js"></script>
+    <script src="../js/Menu/Menu.js"></script>
+
     <footer>
         <div class="row">
             <div class="col-12 col-md-4">

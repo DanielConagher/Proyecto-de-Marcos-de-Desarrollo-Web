@@ -105,22 +105,35 @@
                 const tr = document.createElement("tr");
                 tr.dataset.id = p.id;
 
+                // Usar nombreProducto (nueva estructura) o nombre (estructura antigua) para compatibilidad
+                const nombre = p.nombreProducto || p.nombre || 'Producto';
+                const imagen = p.imagen || '';
+                const precioUnitario = p.precioUnitario || p.precio || 0;
+                const cantidad = p.cantidad || 1;
+                const subtotalItem = precioUnitario * cantidad;
+                
+                // Mostrar extras si existen
+                const extrasHtml = p.extras ? `<small class="text-muted d-block">Extras: ${p.extras}</small>` : '';
+
                 tr.innerHTML = `
                         <td>
                             <div class="d-flex align-items-center gap-2">
-                                <img src="${p.imagen || ''}" alt="${p.nombre}" class="rounded" style="width:56px;height:56px;object-fit:cover;">
-                                <div class="fw-semibold">${p.nombre}</div>
+                                <img src="${imagen}" alt="${nombre}" class="rounded" style="width:56px;height:56px;object-fit:cover;">
+                                <div>
+                                    <div class="fw-semibold">${nombre}</div>
+                                    ${extrasHtml}
+                                </div>
                             </div>
                         </td>
-                        <td>S/ ${Number(p.precio).toFixed(2)}</td>
+                        <td>S/ ${Number(precioUnitario).toFixed(2)}</td>
                         <td style="width:170px;">
                             <div class="input-group input-group-sm">
                                 <button class="btn btn-outline-secondary btn-restar" type="button">-</button>
-                                <input type="number" class="form-control text-center cantidad-input" min="1" value="${p.cantidad}">
+                                <input type="number" class="form-control text-center cantidad-input" min="1" value="${cantidad}">
                                 <button class="btn btn-outline-secondary btn-sumar" type="button">+</button>
                             </div>
                         </td>
-                        <td class="subtotal-item">S/ ${(p.precio * p.cantidad).toFixed(2)}</td>
+                        <td class="subtotal-item">S/ ${subtotalItem.toFixed(2)}</td>
                         <td>
                             <div class="btn-group btn-group-sm">
                                 <button class="btn btn-outline-secondary btn-editar" type="button">Editar</button>
@@ -154,7 +167,12 @@
 
         const entregaSeleccion = getMetodoEntrega();
 
-        const subtotal = productosCarrito.reduce((acc, p) => acc + (Number(p.precio) * Number(p.cantidad)), 0);
+        // Calcular subtotal usando la nueva estructura (precioUnitario * cantidad) o la antigua (precio * cantidad)
+        const subtotal = productosCarrito.reduce((acc, p) => {
+            const precioUnitario = p.precioUnitario || p.precio || 0;
+            const cantidad = p.cantidad || 1;
+            return acc + (Number(precioUnitario) * Number(cantidad));
+        }, 0);
         
         let envio = 0;
         if (subtotal > 0) {
@@ -208,6 +226,10 @@
         // Restar
         if (btn.classList.contains('btn-restar')) {
             carrito[idx].cantidad = Math.max(1, Number(carrito[idx].cantidad) - 1);
+            // Actualizar precioTotal si existe precioUnitario
+            if (carrito[idx].precioUnitario) {
+                carrito[idx].precioTotal = carrito[idx].precioUnitario * carrito[idx].cantidad;
+            }
             setCarrito(carrito);
             actualizarFilaYResumen(tr, carrito[idx]);
             return;
@@ -216,6 +238,10 @@
         // Sumar
         if (btn.classList.contains('btn-sumar')) {
             carrito[idx].cantidad = Number(carrito[idx].cantidad) + 1;
+            // Actualizar precioTotal si existe precioUnitario
+            if (carrito[idx].precioUnitario) {
+                carrito[idx].precioTotal = carrito[idx].precioUnitario * carrito[idx].cantidad;
+            }
             setCarrito(carrito);
             actualizarFilaYResumen(tr, carrito[idx]);
             return;
@@ -249,6 +275,10 @@
 
         const carrito = getCarrito();
         carrito[idx].cantidad = nueva;
+        // Actualizar precioTotal si existe precioUnitario
+        if (carrito[idx].precioUnitario) {
+            carrito[idx].precioTotal = carrito[idx].precioUnitario * carrito[idx].cantidad;
+        }
         setCarrito(carrito);
 
         actualizarFilaYResumen(tr, carrito[idx]);
@@ -259,9 +289,10 @@
         const input = tr.querySelector('.cantidad-input');
         if (input) input.value = item.cantidad;
 
-        // Subtotal de la fila
+        // Subtotal de la fila - usar precioUnitario o precio para compatibilidad
+        const precioUnitario = item.precioUnitario || item.precio || 0;
         const sub = tr.querySelector('.subtotal-item');
-        if (sub) sub.textContent = `S/ ${(Number(item.precio) * Number(item.cantidad)).toFixed(2)}`;
+        if (sub) sub.textContent = `S/ ${(Number(precioUnitario) * Number(item.cantidad)).toFixed(2)}`;
 
         // Totales a la derecha
         recalcularResumen();

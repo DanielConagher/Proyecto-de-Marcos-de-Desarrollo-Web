@@ -4,10 +4,29 @@ import java.math.BigDecimal;
 
 public class ExtraDTO {
     
+    private Long idExtra;
     private String nombre;
     private BigDecimal precio;
 
+    // Constructor vacío
+    public ExtraDTO() {}
+
+    // Constructor completo
+    public ExtraDTO(Long idExtra, String nombre, BigDecimal precio) {
+        this.idExtra = idExtra;
+        this.nombre = nombre;
+        this.precio = precio;
+    }
+
     // Getters y Setters
+    public Long getIdExtra() {
+        return idExtra;
+    }
+
+    public void setIdExtra(Long idExtra) {
+        this.idExtra = idExtra;
+    }
+
     public String getNombre() {
         return nombre;
     }

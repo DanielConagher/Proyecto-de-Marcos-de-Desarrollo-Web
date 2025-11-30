@@ -1,0 +1,553 @@
+:root {
+    --sidebar-width: 250px;
+    --sidebar-collapsed-width: 70px;        
+    --primary-color: #27AE60;          
+    --secondary-color: #f39c12;
+    --dark-color: #653312;
+    --light-color: #ecf0f1;
+    --warning-color: #F1C40F;
+    --button-color: #C0392B;
+    --text-color: #000000;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+}
+
+/* Sidebar Styles */
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--dark-color);
+    color: white;
+    transition: all 0.3s;
+    z-index: 1000;
+    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+#sidebar.collapsed .sidebar-text {
+    display: none;
+}
+
+/* Ajustes del sidebar oculto para logo de Nonna's Pizza*/
+#sidebar.collapsed .logo-container,
+#sidebar.collapsed .sidebar-logo {
+    width: 40px;
+    height: 40px;
+}
+
+#sidebar.collapsed .sidebar-logo {
+    width: 36px;
+    height: 36px;
+}
+
+/* Ajustes del sidebar oculto para avatar*/
+#sidebar.collapsed .user-avatar,
+#sidebar.collapsed .avatar-img {
+    width: 40px;
+    height: 40px;
+}
+
+#sidebar.collapsed .avatar-img {
+    width: 36px;
+    height: 36px;
+}
+
+#sidebar.collapsed .sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.sidebar-header {
+    padding: 20px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--light-color);
+    margin: 0 auto 10px auto;
+    overflow: hidden;
+    transition: width 0.3s, height 0.3s;
+}
+
+.sidebar-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: width 0.3s, height 0.3s;
+}
+
+.sidebar-menu {
+    padding: 15px 0;
+}
+
+.sidebar-menu .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 12px 20px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.sidebar-menu .nav-link:hover, 
+.sidebar-menu .nav-link.active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--primary-color);
+}
+
+.sidebar-menu .nav-link i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 10px;
+    transition: width 0.3s, height 0.3s;
+}
+
+.user-avatar img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: width 0.3s, height 0.3s;
+}
+
+.user-details {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 0;
+}
+
+.status-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #2ecc71;
+    margin-right: 5px;
+}
+
+.sidebar-action {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-bottom: 8px;
+    transition: justify-content 0.3s;
+}
+
+.sidebar-action:hover {
+    color: white;
+}
+
+.sidebar-action i {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+/* Página Principal */
+#content {
+    margin-left: var(--sidebar-width);
+    transition: all 0.3s;
+    min-height: 100vh;
+    }
+
+#content.expanded {    
+    margin-left: var(--sidebar-collapsed-width);
+}
+
+.top-navbar {
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    position: sticky;    
+    top: 0;
+    z-index: 100;
+}
+
+.breadcrumb {
+    background: transparent;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "•";
+    color: #6c757d;
+}
+
+.date-display {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.notification-badge {
+    position: relative;
+}
+
+.notification-badge .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+
+/*  Pagina Contenido */
+.page-content {
+    padding: 20px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;    
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600; 
+    padding: 22px 24px 18px 20px;
+    font-size: 1.08rem;   
+}
+
+/* Tarjetas de Reportes */
+.periodo-card {
+    border-radius: 8px;
+    padding: 20px;
+    height: 100%;
+    transition: transform 0.2s;
+}
+
+.periodo-card:hover {
+    transform: translateY(-5px);
+}
+
+.periodo-card .periodo-titulo {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.periodo-card .periodo-valor {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+.periodo-card .periodo-detalle {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.periodo-card .periodo-trend {
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.trend-positive {
+    color: #28a745;
+}
+
+.trend-negative {
+    color: #dc3545;
+}
+
+/* Sección de Productos Más Vendidos */
+.producto-vendido-card {
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.2s;
+}
+
+.producto-vendido-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.producto-vendido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.producto-nombre {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.producto-precio {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.producto-vendido-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.producto-unidades {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.producto-ranking {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: #e9ecef;
+    color: var(--dark-color);
+}
+
+.ranking-1 {
+    background-color: #ffd700;
+    color: #856404;
+}
+
+.ranking-2 {
+    background-color: #c0c0c0;
+    color: #495057;
+}
+
+.ranking-3 {
+    background-color: #cd7f32;
+    color: #fff;
+}
+
+.barra-progreso {
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.barra-progreso-fill {    
+    height: 100%;
+    border-radius: 3px;
+    background-color: var(--primary-color);
+}
+
+/* Sección de Rendimiento del Personal de Nonna's */
+.empleado-card {
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.2s;
+}
+
+.empleado-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empleado-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.empleado-nombre {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.empleado-puntuacion {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.empleado-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.empleado-metricas {
+    color: #6c757d;
+}
+
+.empleado-calificacion {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+/* Tarjetas de Métricas */
+.metrica-card {
+    border-radius: 8px;
+    padding: 20px;
+    height: 100%;
+}
+
+.metrica-titulo {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.metrica-titulo i {
+    margin-right: 8px;
+}
+
+.metrica-valor {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+.metrica-comparacion {
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+/* Sección de Horarios */
+.horario-card {
+    border-radius: 8px;
+    padding: 15px;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.horario-card:hover {
+    transform: translateY(-5px);
+}
+
+.horario-rango {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 10px;
+}
+
+.horario-valor {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+
+.horario-ordenes {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.horario-etiqueta {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.etiqueta-pico {
+    background-color: #28a745;
+    color: white;
+}
+
+.etiqueta-cena {
+    background-color: #6f42c1;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #sidebar {
+        width: var(--sidebar-collapsed-width);
+    }
+
+    #sidebar .sidebar-text {
+        display: none;
+    }
+
+    #content {
+        margin-left: var(--sidebar-collapsed-width);    
+    }
+
+    #sidebar.mobile-expanded {
+        width: var(--sidebar-width);
+    }
+
+    #sidebar.mobile-expanded .sidebar-text {
+        display: inline;
+    }
+
+    #content.mobile-expanded {
+        margin-left: var(--sidebar-width);
+    }
+}
