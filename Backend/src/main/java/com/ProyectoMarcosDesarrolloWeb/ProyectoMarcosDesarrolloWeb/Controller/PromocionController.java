@@ -3,9 +3,11 @@ package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Controller;
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Service.PromocionService;
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.PromocionesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/promociones")
@@ -39,4 +41,11 @@ public class PromocionController {
     public void eliminar(@PathVariable Long id) {
         promocionService.eliminar(id);
     }
+
+    @GetMapping("/{id}/productos")
+    public ResponseEntity<Set<Long>> obtenerProductosDePromocion(@PathVariable Long id) {
+        Set<Long> productosIds = promocionService.obtenerProductosIdsPorPromocion(id);
+        return ResponseEntity.ok(productosIds);
+    }
+
 }

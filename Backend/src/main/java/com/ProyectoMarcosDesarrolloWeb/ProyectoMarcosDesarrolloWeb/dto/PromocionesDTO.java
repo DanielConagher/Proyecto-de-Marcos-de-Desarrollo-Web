@@ -1,6 +1,8 @@
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PromocionesDTO {
     private Long idPromocion;
@@ -10,6 +12,8 @@ public class PromocionesDTO {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private String imagenReferencia;
+
+    private Set<Long> productosIds = new HashSet<>();
 
     public Long getIdPromocion() {
         return idPromocion;
@@ -66,4 +70,13 @@ public class PromocionesDTO {
     public void setImagenReferencia(String imagenReferencia) {
         this.imagenReferencia = imagenReferencia;
     }
+
+    public Set<Long> getProductosIds() {
+        return productosIds;
+    }
+
+    public void setProductosIds(Set<Long> productosIds) {
+        this.productosIds = productosIds;
+    }
 }
+

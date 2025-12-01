@@ -45,11 +45,11 @@ function vaciarCarrito() {
     const contenidoProductos = document.getElementById("contenidoProductos");
     const carritoVacio = document.getElementById("carritoVacio");
     const totalCarrito = document.getElementById("totalCarrito");
-    
+
     if (contenidoProductos) contenidoProductos.classList.add("d-none");
     if (carritoVacio) carritoVacio.classList.remove("d-none");
     if (totalCarrito) totalCarrito.textContent = "S/0.00";
-    
+
     guardarCarritoEnStorage();
 }
 
@@ -60,15 +60,28 @@ function actualizarEstadoCarrito() {
     const lista = document.getElementById("lista-Productos");
     const contenidoProductos = document.getElementById("contenidoProductos");
     const carritoVacio = document.getElementById("carritoVacio");
-    
+
     if (!lista || !contenidoProductos || !carritoVacio) return;
-    
+
     if (carrito.length > 0) {
         carritoVacio.classList.add("d-none");
         contenidoProductos.classList.remove("d-none");
     } else {
         contenidoProductos.classList.add("d-none");
         carritoVacio.classList.remove("d-none");
+    }
+}
+
+async function obtenerProductosPromoDesdeBackend(idPromo) {
+    if (!idPromo) return new Set();
+    try {
+        const resp = await fetch(`http://localhost:8080/api/promociones/${idPromo}/productos`);
+        if (!resp.ok) return new Set();
+        const idsArray = await resp.json(); // espera un array JSON [1, 2, 3]
+        return new Set(idsArray.map(Number));
+    } catch (err) {
+        console.error("Error al obtener productos de la promo:", err);
+        return new Set();
     }
 }
 
@@ -90,26 +103,63 @@ function actualizarEstadoCarrito() {
  * @param {string} item.extras - Nombres de extras separados por coma
  * @param {string} item.imagen - URL de la imagen (base64 o ruta)
  */
-function agregarProducto(item) {
-    // Generar un ID único para el item del carrito basado en producto + tamaño + extras
+async function agregarProducto(item) {
+
+    // Verificar promo aplicada en localStorage
+    const promoAplicada = Number(localStorage.getItem("promoAplicada")) || null;
+
+    if (promoAplicada) {
+        try {
+            // Obtener productos incluidos en la promo
+            const productosPromoSet = await obtenerProductosPromoDesdeBackend(promoAplicada);
+
+            // Si el producto está dentro de la promoción
+            if (productosPromoSet.has(Number(item.idProducto))) {
+
+                // Obtener información completa de la promoción (incluye porcentaje)
+                const respPromo = await fetch(`http://localhost:8080/api/promociones/${promoAplicada}`);
+
+                if (respPromo.ok) {
+                    const promoData = await respPromo.json();
+                    const descuento = Number(promoData.descuentoPorcentaje) || 0;
+
+                    if (descuento > 0 && item.precioUnitario) {
+                        const factor = (100 - descuento) / 100;
+
+                        item.precioUnitario = Number((item.precioUnitario * factor).toFixed(2));
+
+                        item.precioTotal = Number(
+                            (item.precioUnitario * (item.cantidad || 1)).toFixed(2)
+                        );
+
+                        item.promoAplicadaId = promoAplicada;
+                        item.descuentoAplicado = descuento;
+                    }
+                }
+            }
+
+        } catch (err) {
+            console.error("Error aplicando promoción:", err);
+        }
+    }
+
+    // ========== CÓDIGO ORIGINAL DEL CARRITO (NO TOCADO) ==========
+
     const extrasKey = item.idExtras ? item.idExtras.sort().join('-') : 'none';
     const itemKey = `${item.idProducto}-${item.idTamanio}-${extrasKey}`;
-    
-    // Verificar si ya existe un producto idéntico en el carrito
+
     const existente = carrito.find(p => {
         const pExtrasKey = p.idExtras ? p.idExtras.sort().join('-') : 'none';
         const pKey = `${p.idProducto}-${p.idTamanio}-${pExtrasKey}`;
         return pKey === itemKey;
     });
-    
+
     if (existente) {
-        // Si existe, incrementar la cantidad
         existente.cantidad += item.cantidad;
         existente.precioTotal = existente.precioUnitario * existente.cantidad;
     } else {
-        // Si no existe, agregar nuevo item
         const nuevoItem = {
-            id: Date.now(), // ID único para el item del carrito
+            id: Date.now(),
             idProducto: item.idProducto,
             nombreProducto: item.nombreProducto,
             idTamanio: item.idTamanio,
@@ -145,7 +195,7 @@ function modificarCantidad(itemId, cambio) {
     const item = carrito.find(p => p.id === itemId);
     if (item) {
         item.cantidad += cambio;
-        
+
         if (item.cantidad <= 0) {
             eliminarProducto(itemId);
         } else {
@@ -165,9 +215,9 @@ function modificarCantidad(itemId, cambio) {
 function renderizarCarrito() {
     const contenedor = document.getElementById("lista-Productos");
     const totalElement = document.getElementById("totalCarrito");
-    
+
     if (!contenedor || !totalElement) return;
-    
+
     contenedor.innerHTML = "";
     let suma = 0;
 
@@ -181,10 +231,10 @@ function renderizarCarrito() {
         div.dataset.itemId = item.id;
 
         // Mostrar extras si los hay
-        const extrasHtml = item.extras 
-            ? `<small class="text-muted d-block">Extras: ${item.extras}</small>` 
+        const extrasHtml = item.extras
+            ? `<small class="text-muted d-block">Extras: ${item.extras}</small>`
             : '';
-        
+
         // Nombre del producto (compatibilidad)
         const nombreProducto = item.nombreProducto || item.nombre || 'Producto';
         const imagen = item.imagen || '../Imagenes/default.jpg';
@@ -301,7 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (iconoCarrito) {
         iconoCarrito.addEventListener("click", abrirCarrito);
     }
-    
+
     // También buscar por clase para compatibilidad
     const iconoCarritoClase = document.querySelector(".icono-carrito");
     if (iconoCarritoClase) {

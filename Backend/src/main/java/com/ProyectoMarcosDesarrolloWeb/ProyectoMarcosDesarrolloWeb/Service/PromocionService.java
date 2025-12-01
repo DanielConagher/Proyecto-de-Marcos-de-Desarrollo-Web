@@ -1,5 +1,6 @@
 package com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Service;
 
+import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity.Producto;
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Entity.Promocion;
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Mapper.PromocionMapper;
 import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.Repository.PromocionRepository;
@@ -7,7 +8,9 @@ import com.ProyectoMarcosDesarrolloWeb.ProyectoMarcosDesarrolloWeb.dto.Promocion
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,4 +43,11 @@ public class PromocionService {
     public void eliminar(Long id) {
         promocionRepository.deleteById(id);
     }
+
+    public Set<Long> obtenerProductosIdsPorPromocion(Long idPromocion) {
+        return promocionRepository.findById(idPromocion)
+                .map(p -> p.getProductos().stream().map(Producto::getIdProducto).collect(Collectors.toSet()))
+                .orElse(Collections.emptySet());
+    }
+
 }
